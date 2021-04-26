@@ -16,20 +16,21 @@ public class AnimationStateController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-          if (Input.GetKey("w"))
-          {
-                animator.SetBool("isWalking", true);
-                Debug.Log("Player pressed \"w\"");
-          }
           if (Input.GetKey("s"))
           {
-                animator.SetBool("isRunning", true);
-                Debug.Log("Player pressed \"s\"");
+                animator.SetBool("isWalking", true);
+                Debug.Log("Player pressed \"s\" and invoked isWalking = \"" + animator.GetBool("isWalking") + "\"");
           }
-          else
+          if (Input.GetKey("w"))
           {
-                animator.SetBool("isRunning", false);
+                animator.SetBool("isRunning", true);
+                Debug.Log("Player pressed \"w\" and invoked isRunning = \"" + animator.GetBool("isRunning") + "\"");
+          }
+          else if (!Input.GetKey("s") && !Input.GetKey("w"))
+          {
                 animator.SetBool("isWalking", false);
+                animator.SetBool("isRunning", false);
+                Debug.Log("Nothing is pressed, so isRunning == \"" + animator.GetBool("isRunning") + "\" and isWalking == \"" + animator.GetBool("isWalking") + "\"");
           }
     }
 }
