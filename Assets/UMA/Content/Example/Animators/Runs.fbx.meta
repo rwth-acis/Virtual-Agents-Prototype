@@ -1987,7 +1987,7 @@ ModelImporter:
       transformMask: []
       maskType: 0
       maskSource: {instanceID: 0}
-      additiveReferencePoseFrame: 0
+      additiveReferencePoseFrame: 292
     - serializedVersion: 16
       name: RunLeft
       takeName: RunLeft
