@@ -20,15 +20,36 @@ public class CharacterMovementController : MonoBehaviour
     {
         Vector3 compoundMovement = Movement() + Gravity();
         characterController.Move(compoundMovement * Time.deltaTime);
+        // Do not reset rotation if there is no input
+        if (Movement().magnitude >= 0.1f)
+        {
+            transform.rotation = Rotation();
+        }
     }
 
     Vector3 Movement()
     {
-        Vector3 moveVector = Vector3.zero;
-        moveVector += transform.forward * Input.GetAxis("Vertical");
-        moveVector += transform.right * Input.GetAxis("Horizontal");
-        moveVector *= speed;
-        return moveVector;
+        Vector3 movementVector = Vector3.zero;
+        /*movementVector += transform.forward * Input.GetAxis("Vertical");
+        movementVector += transform.right * Input.GetAxis("Horizontal");*/
+        float horizontal = Input.GetAxisRaw("Horizontal");
+        float vertical = Input.GetAxisRaw("Vertical");
+        Vector3 direction = new Vector3(horizontal, 0f, vertical).normalized;
+        movementVector += direction;
+
+        movementVector *= speed;
+        return movementVector;
+    }
+
+    Quaternion Rotation()
+    {
+        float horizontal = Input.GetAxisRaw("Horizontal");
+        float vertical = Input.GetAxisRaw("Vertical");
+        Vector3 direction = new Vector3(horizontal, 0f, vertical).normalized;
+        // Angle in degrees
+        float targetAngle = Mathf.Atan2(direction.x, direction.z) * Mathf.Rad2Deg;
+        Quaternion rotation = Quaternion.Euler(0f, targetAngle, 0f);
+        return rotation;
     }
 
     Vector3 Gravity()
