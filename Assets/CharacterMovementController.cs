@@ -5,9 +5,9 @@ using UnityEngine;
 public class CharacterMovementController : MonoBehaviour
 {
     private CharacterController characterController;
-    public float speed = 2;
+    public float speed;
     private float currentGravity;
-    public float gravity = 20;
+    public float gravity;
     private float turnSmoothVelocity;
     public float turnSmoothTime = 0.1f;
 
