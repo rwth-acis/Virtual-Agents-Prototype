@@ -7,7 +7,9 @@ public class CharacterMovementController : MonoBehaviour
     private CharacterController characterController;
     public float speed = 2;
     private float currentGravity;
-    public float gravity;
+    public float gravity = 20;
+    private float turnSmoothVelocity;
+    public float turnSmoothTime = 0.1f;
 
     // Start is called before the first frame update
     void Start()
@@ -48,7 +50,9 @@ public class CharacterMovementController : MonoBehaviour
         Vector3 direction = new Vector3(horizontal, 0f, vertical).normalized;
         // Angle in degrees
         float targetAngle = Mathf.Atan2(direction.x, direction.z) * Mathf.Rad2Deg;
-        Quaternion rotation = Quaternion.Euler(0f, targetAngle, 0f);
+        // Smooth turning
+        float angle = Mathf.SmoothDampAngle(transform.eulerAngles.y, targetAngle, ref turnSmoothVelocity, turnSmoothTime);
+        Quaternion rotation = Quaternion.Euler(0f, angle, 0f);
         return rotation;
     }
 
