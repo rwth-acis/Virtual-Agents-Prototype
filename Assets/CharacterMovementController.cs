@@ -6,7 +6,7 @@ public class CharacterMovementController : MonoBehaviour
 {
     private CharacterController characterController;
     public float speed;
-    
+
     // Start is called before the first frame update
     void Start()
     {
@@ -16,6 +16,15 @@ public class CharacterMovementController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        characterController.SimpleMove(Vector3.forward * speed);
+        characterController.Move(Movement() * Time.deltaTime);
+    }
+
+    Vector3 Movement()
+    {
+        Vector3 moveVector = Vector3.zero;
+        moveVector += transform.forward * Input.GetAxis("Vertical");
+        moveVector += transform.right * Input.GetAxis("Horizontal");
+        moveVector *= speed;
+        return moveVector;
     }
 }
