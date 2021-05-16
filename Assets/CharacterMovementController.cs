@@ -5,7 +5,9 @@ using UnityEngine;
 public class CharacterMovementController : MonoBehaviour
 {
     private CharacterController characterController;
-    public float speed;
+    public float speed = 2;
+    private float currentGravity;
+    public float gravity;
 
     // Start is called before the first frame update
     void Start()
@@ -16,7 +18,8 @@ public class CharacterMovementController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        characterController.Move(Movement() * Time.deltaTime);
+        Vector3 compoundMovement = Movement() + Gravity();
+        characterController.Move(compoundMovement * Time.deltaTime);
     }
 
     Vector3 Movement()
@@ -26,5 +29,20 @@ public class CharacterMovementController : MonoBehaviour
         moveVector += transform.right * Input.GetAxis("Horizontal");
         moveVector *= speed;
         return moveVector;
+    }
+
+    Vector3 Gravity()
+    {
+        Vector3 gravityVector = new Vector3(0, -currentGravity, 0);
+        currentGravity += gravity * Time.deltaTime;
+        // Reset gravity
+        if(characterController.isGrounded)
+        {
+            if(currentGravity > 1f)
+            {
+                currentGravity = 1f;
+            }
+        }
+        return gravityVector;
     }
 }
