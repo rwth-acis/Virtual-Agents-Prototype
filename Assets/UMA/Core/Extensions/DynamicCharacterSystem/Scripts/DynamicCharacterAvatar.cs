@@ -1,7 +1,7 @@
 using UnityEngine;
 //For loading a recipe directly from the web @2465
 using UnityEngine.Networking;
-#if UNITY_EDITOR 
+#if UNITY_EDITOR
 using UnityEditor;
 using UnityEditor.SceneManagement;//for marking converted colors as needing saving
 #endif
@@ -21,7 +21,7 @@ using System.Threading.Tasks;
 namespace UMA.CharacterSystem
 {
     [ExecuteInEditMode]
-    public class DynamicCharacterAvatar : UMAAvatarBase 
+    public class DynamicCharacterAvatar : UMAAvatarBase
     {
         public float DelayUnload = 2.0f;
         public bool BundleCheck = true;
@@ -49,7 +49,7 @@ namespace UMA.CharacterSystem
 
         #endregion
 
-        #region ENUMS 
+        #region ENUMS
         [Flags]
         public enum ChangeRaceOptions
         {
@@ -104,7 +104,7 @@ namespace UMA.CharacterSystem
 
         //This will generate itself from a list available Races and set itself to the current value of activeRace.name
         [Tooltip("Selects the race to used. When initialized, the Avatar will use the base recipe from the RaceData selected.")]
-        public RaceSetter activeRace = new RaceSetter(); 
+        public RaceSetter activeRace = new RaceSetter();
 
         //To determine what recipes from a previous race can be applied to a the new race (on race change) sometimes we need to know what the previous race was
         //for example when a wardrobe collection is applied to a race, when the race changes we need to know if a given current slot was set because the wardrobe collection was compatible with the previous race.
@@ -155,7 +155,7 @@ namespace UMA.CharacterSystem
 #endif
         [Tooltip("Change to lower this specific DCA's atlas resolution. Leave 1.0f for resolution to be automatic.")]
         [Range(0.0f,1.0f)]
-        public float AtlasResolutionScale = 1.0f; 
+        public float AtlasResolutionScale = 1.0f;
 
         [EnumFlags]
         public LoadOptions defaultLoadOptions = LoadOptions.loadRace | LoadOptions.loadDNA | LoadOptions.loadWardrobe | LoadOptions.loadBodyColors | LoadOptions.loadWardrobeColors;
@@ -192,13 +192,13 @@ namespace UMA.CharacterSystem
 #endif
 #endregion
 
-#region PRIVATE FIELDS 
+#region PRIVATE FIELDS
         //Is building the character enabled? Disable this to make multiple changes to the avatar that will be built
         //without creating multiple build calls. when you are finished set it to true and the character will build
         [SerializeField]
         [Tooltip("Builds the character on recipe load or race changed. If you want to load multiple recipes into a character you can disable this and enable it when you are done. By default this should be true.")]
         public bool _buildCharacterEnabled = true;
-        //everytime an avatar changes race a cache state can (optionally) be created so that when the user 
+        //everytime an avatar changes race a cache state can (optionally) be created so that when the user
         //switches between races they do not loose their previous changes to the avatar when it was set to be that race
         private Dictionary<string, string> cacheStates = new Dictionary<string, string>();
         //the wardrobe slots that are hidden by the avatars current wardrobe
@@ -210,7 +210,7 @@ namespace UMA.CharacterSystem
         private bool _isFirstSettingsBuild = true;
 
         //If BuildCharacter detects that wardrobe recipes applied to this character were only 'crossCompatible' (rather than being directly assigned as compatible with the current race)
-        //this is set to true and will trigger FixCrossCompatibleSlots after the resulting recipe is compiled. 
+        //this is set to true and will trigger FixCrossCompatibleSlots after the resulting recipe is compiled.
         //This removes any 'equivalent slots' that may have been added by the cross compatible recipes.
         //This is reset at the beginning of every build operation
         private bool wasCrossCompatibleBuild = false;
@@ -230,8 +230,8 @@ namespace UMA.CharacterSystem
 #endif
 #endregion
 
-#region PROPERTIES 
-        //this previously get/set the base.umaRace value - but we dont want anyone to do that. because set wont actually change the race of the avatar 
+#region PROPERTIES
+        //this previously get/set the base.umaRace value - but we dont want anyone to do that. because set wont actually change the race of the avatar
         //and the value for get is only correct after the avatar has been built- not while we are generating the actual settings before we call 'Load'
         //If the want to set the Race when the avatar has built they should use ChangeRace. If they want to set it before they should use RacePreset
         //It could be used to return activeRace.raceData and/or could be made to call the right methods depending on whether the Avatar has been created
@@ -367,7 +367,7 @@ namespace UMA.CharacterSystem
 
 #endregion
 
-#region METHODS 
+#region METHODS
 
 #region Start Update and Inititalization
 
@@ -463,7 +463,7 @@ namespace UMA.CharacterSystem
 #if SUPER_LOGGING
 			Debug.Log("Start on DynamicCharacterAvatar: " + gameObject.name);
 #endif
-            AddCharacterStateCache("NULL"); 
+            AddCharacterStateCache("NULL");
             base.Start();
 
             umaData.blendShapeSettings.ignoreBlendShapes = !loadBlendShapes;
@@ -539,7 +539,7 @@ namespace UMA.CharacterSystem
 #if UNITY_EDITOR
         public void GenerateSingleUMA()
         {
-            UMAGenerator ugb = umaGenerator as UMAGenerator; 
+            UMAGenerator ugb = umaGenerator as UMAGenerator;
             if (umaGenerator == null)
             {
                 if (UMAContext.Instance == null)
@@ -775,7 +775,7 @@ namespace UMA.CharacterSystem
 
         private bool isDefaultDna(float val)
         {
-            // Because of the way text recipes store DNA, 
+            // Because of the way text recipes store DNA,
             // they are not exact.
             if (val >= 0.4999f && val < 0.502f) return true;
             return false;
@@ -852,7 +852,7 @@ namespace UMA.CharacterSystem
             }
 
             // Save the Avatar def.
-            AvatarDefinition adf = new AvatarDefinition(); 
+            AvatarDefinition adf = new AvatarDefinition();
             adf.RaceName = this.activeRace.name;
             adf.Wardrobe = Wardrobe.ToArray();
             adf.Dna = Dna.ToArray();
@@ -1011,7 +1011,7 @@ namespace UMA.CharacterSystem
 #region SETTINGS MODIFICATION (RACE RELATED)
 
         /// <summary>
-        /// Sets the starting race of the avatar based on the value of the 'activeRace'. 
+        /// Sets the starting race of the avatar based on the value of the 'activeRace'.
         /// </summary>
         bool SetActiveRace()
         {
@@ -1037,12 +1037,12 @@ namespace UMA.CharacterSystem
                     umaRecipe = activeRace.racedata.baseRaceRecipe;
                 }
             }
-            //if we are loading an old UMARecipe from the recipe field and the old race is not in resources the race will be null but the recipe wont be 
+            //if we are loading an old UMARecipe from the recipe field and the old race is not in resources the race will be null but the recipe wont be
             if (umaRecipe == null)
             {
                 if (Debug.isDebugBuild)
                     Debug.LogWarning("[SetActiveRace] could not find baseRaceRecipe for the race " + activeRace.name + ". Have you set one in the raceData?");
-                return false; 
+                return false;
             }
             return true;
         }
@@ -1223,7 +1223,7 @@ namespace UMA.CharacterSystem
                     {
                         if (((recipe._recipe.compatibleRaces.Count == 0 || recipe._recipe.compatibleRaces.Contains(activeRace.name)) || (activeRace.racedata.IsCrossCompatibleWith(recipe._recipe.compatibleRaces) && activeRace.racedata.wardrobeSlots.Contains(recipe._recipe.wardrobeSlot))))
                         {
-                            //the check activeRace.data.wardrobeSlots.Contains(recipe._recipe.wardrobeSlot) makes sure races that are cross compatible 
+                            //the check activeRace.data.wardrobeSlots.Contains(recipe._recipe.wardrobeSlot) makes sure races that are cross compatible
                             //with another race but which dont have all of that races wardrobeslots, dont try to load things they dont have wardrobeslots for
                             //However we need to make sure that if a slot has already been assigned that is DIRECTLY compatible with the race it is not overridden
                             //by one that is cross compatible
@@ -1368,7 +1368,7 @@ namespace UMA.CharacterSystem
             }
 
             // No compatible races set... Oh well, just allow it.
-            // Must work for everything! 
+            // Must work for everything!
             if (utr.compatibleRaces.Count == 0)
             {
                 internalSetSlot(utr, utr.wardrobeSlot);
@@ -1647,7 +1647,7 @@ namespace UMA.CharacterSystem
             }
         }
         /// <summary>
-        /// Searches the current wardrobeRecipes for recipes that are compatible or backwards compatible with this race. 
+        /// Searches the current wardrobeRecipes for recipes that are compatible or backwards compatible with this race.
         /// If nothing is found the fallback set is applied or if and preloadWardrobeRecipes.loadDefaultRecipes is true, default recipes are applied
         /// </summary>
         void ApplyCurrentWardrobeToNewRace(List<WardrobeSettings> fallbackSet = null)
@@ -1946,7 +1946,7 @@ namespace UMA.CharacterSystem
 		/// <param name="UpdateTexture"></param>
 		public void ClearColor(string Name, bool Update = true)
         {
-            characterColors.RemoveColor(Name);  
+            characterColors.RemoveColor(Name);
             if (Update)
             {
                 BuildCharacter(true,!BundleCheck);
@@ -2224,7 +2224,7 @@ namespace UMA.CharacterSystem
             {
                 string Category = db.GetType().ToString();
 
-                //TODO racedata.GetConverter is obsolete because lots of converters can use the same dna names (dnaAsset) now 
+                //TODO racedata.GetConverter is obsolete because lots of converters can use the same dna names (dnaAsset) now
                 //I'm just gonna use the first found one- we can do something more advanced if/when we need to
                 IDNAConverter[] dcb = activeRace.racedata.GetConverters(db);
                 if (dcb.Length > 0 && dcb[0] != null && (!string.IsNullOrEmpty(dcb[0].DisplayValue)))
@@ -2259,7 +2259,7 @@ namespace UMA.CharacterSystem
         /// <summary>
         /// Sets the Expression set for the Avatar based on the Avatars set race.
         /// </summary>
-        /// 
+        ///
         public void SetExpressionSet(bool addExressionPlayer = false)
         {
             var thisExpressionPlayer = gameObject.GetComponent<UMAExpressionPlayer>();
@@ -2849,7 +2849,7 @@ namespace UMA.CharacterSystem
                     TryImportDNAValues(prevDna);
                 }
 
-                // This was before the DNA was set. I'm 
+                // This was before the DNA was set. I'm
                 // not sure how it worked that way.
                 if (wasBuildCharacterEnabled)
                 {
@@ -3019,7 +3019,7 @@ namespace UMA.CharacterSystem
                     for (int i = 0; i < textFiles.Length; i++)
                     {
                         if (textFiles[i].name == loadFilename.Trim() || textFiles[i].name.ToLower() == loadFilename.Trim())
-                        { 
+                        {
                             recipeString = textFiles[i].text;
                         }
                     }
@@ -3073,7 +3073,7 @@ namespace UMA.CharacterSystem
 #endregion
 
 #region CHARACTER FINAL ASSEMBLY
-     
+
 
         /// <summary>
         /// Builds the character by combining the Avatar's raceData.baseRecipe with the any wardrobe recipes that have been applied to the avatar.
@@ -3184,7 +3184,7 @@ namespace UMA.CharacterSystem
                     {
                         UMATextRecipe utr = WardrobeRecipes[ws];
                         //we can use the race data here to filter wardrobe slots
-                        //if checking a backwards compatible race we also need to check the race has a compatible wardrobe slot, 
+                        //if checking a backwards compatible race we also need to check the race has a compatible wardrobe slot,
                         //since while a race can be backwards compatible it does not *have* to have all the same wardrobeslots as the race it is compatible with
                         if (activeRace.name == "" || ((utr.compatibleRaces.Count == 0 || utr.compatibleRaces.Contains(activeRace.name)) || (activeRace.racedata.IsCrossCompatibleWith(utr.compatibleRaces) && activeRace.racedata.wardrobeSlots.Contains(utr.wardrobeSlot))))
                         {
@@ -3254,7 +3254,7 @@ namespace UMA.CharacterSystem
             else
             {
                 if (useBundleParameter)
-                    skipBundleCheck = !BundleCheck; 
+                    skipBundleCheck = !BundleCheck;
             }
 
 #else
@@ -3305,7 +3305,7 @@ namespace UMA.CharacterSystem
                     if (LoadedHandles.Count > 1)
                     {
                         AsyncOp OldOp = LoadedHandles.Dequeue();
-                        if (gameObject.activeInHierarchy && DelayUnload > 0.0f)  
+                        if (gameObject.activeInHierarchy && DelayUnload > 0.0f)
                         {
                             StartCoroutine(CleanupAfterDelay(OldOp));
                         }
@@ -3339,7 +3339,7 @@ namespace UMA.CharacterSystem
         {
             yield return new WaitForSeconds(DelayUnload);
             UnloadOldestQueuedHandle(Op);
-        } 
+        }
 #endif
         private void ApplyPredefinedDNA()
         {
@@ -3360,7 +3360,7 @@ namespace UMA.CharacterSystem
                 }
             }
         }
-         
+
         /// <summary>
         /// With a DynamicCharacterAvatar you do not call Load directly. If you want to load an UMATextRecipe directly call ImportSettings(yourUMATextRecipe)
         /// </summary>
@@ -3374,7 +3374,7 @@ namespace UMA.CharacterSystem
             return;
         }
         /// <summary>
-        /// Loads the Avatar from the given recipe and additional recipe. 
+        /// Loads the Avatar from the given recipe and additional recipe.
         /// Has additional functions for removing any slots that should be hidden by any 'wardrobe Recipes' that are in the additional recipes array.
         /// </summary>
         /// <param name="umaRecipe"></param>
@@ -3490,7 +3490,7 @@ namespace UMA.CharacterSystem
             {
               /*if (rebuildSkeleton)
                 {
-                    
+
                     // Old New Way
                     DestroyImmediate(umaData.umaRoot,false);
                     umaData.umaRoot = null;
@@ -3535,7 +3535,7 @@ namespace UMA.CharacterSystem
                 }
             }
         }
-        
+
         void UpdateBounds()
         {
             foreach (IDNAConverter id in activeRace.data.dnaConverterList)
@@ -3751,7 +3751,7 @@ namespace UMA.CharacterSystem
                     }
                 }
             }
-            
+
             umaData.umaRecipe.slotDataList = NewSlots.ToArray();
         }
 
@@ -3762,7 +3762,7 @@ namespace UMA.CharacterSystem
             {
                 if (sd == null)
                     continue;
-                
+
                 if (!hiddenSlots.Contains(sd.asset.slotName))
                 {
                     NewSlots.Add(sd);
@@ -3954,7 +3954,7 @@ namespace UMA.CharacterSystem
         }
 #endregion
 
-#region CLEANUP 
+#region CLEANUP
 
         /// <summary>
         /// Cleanup UMA system
@@ -3970,7 +3970,7 @@ namespace UMA.CharacterSystem
             }
 #endif
             if (umaData != null)
-            { 
+            {
                 if (umaData.umaGenerator != null)
                     umaData.umaGenerator.removeUMA(umaData);
             }
@@ -4392,11 +4392,11 @@ namespace UMA.CharacterSystem
                 List<ColorValue> newColors = new List<ColorValue>();
 
                 foreach (ColorValue cv in Colors)
-                { 
+                {
                     if (cv.Name != name)
                         newColors.Add(cv);
                 }
-                 
+
                 Colors = newColors;
             }
         }

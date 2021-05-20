@@ -1,10 +1,17 @@
 fileFormatVersion: 2
 guid: bcffb0a198605474c8a4d1c67c1515fe
-timeCreated: 1428420101
-licenseType: Store
 MonoImporter:
+  externalObjects: {}
   serializedVersion: 2
-  defaultReferences: []
+  defaultReferences:
+  - context: {instanceID: 0}
+  - umaData: {instanceID: 0}
+  - defaultRendererAsset: {instanceID: 0}
+  - umaRecipe: {instanceID: 0}
+  - umaGenerator: {instanceID: 0}
+  - animationController: {fileID: 9100000, guid: ae859d58fdf844b73863d3833f955cdf,
+      type: 2}
+  - customModel: {instanceID: 0}
   executionOrder: 0
   icon: {instanceID: 0}
   userData: 
