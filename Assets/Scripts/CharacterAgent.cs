@@ -11,6 +11,7 @@ public class CharacterAgent : MonoBehaviour
     public GameObject destination;
     public NavMeshAgent agent;
     public ThirdPersonCharacter character;
+    public float speed = 1;
     // Start is called before the first frame update
     void Start()
     {
@@ -26,7 +27,7 @@ public class CharacterAgent : MonoBehaviour
         if (agent.remainingDistance > agent.stoppingDistance)
         {
             // Character's movement is based on agent's desired movement. "False" for no crouching and no jumping
-            character.Move(agent.desiredVelocity, false, false);
+            character.Move(agent.desiredVelocity * speed, false, false);
         }
         else
         {
