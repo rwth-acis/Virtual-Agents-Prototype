@@ -12,6 +12,7 @@ public class CharacterAgent : MonoBehaviour
     public NavMeshAgent agent;
     public ThirdPersonCharacter character;
     public float speed = 1;
+    public Rigidbody rigidBody;
     // Start is called before the first frame update
     void Start()
     {
@@ -26,8 +27,16 @@ public class CharacterAgent : MonoBehaviour
         agent.SetDestination(destination.transform.position);
         if (agent.remainingDistance > agent.stoppingDistance)
         {
-            // Character's movement is based on agent's desired movement. "False" for no crouching and no jumping
-            character.Move(agent.desiredVelocity * speed, false, false);
+            if(!rigidBody.IsSleeping())
+            {
+                // Character's movement is based on agent's desired movement. "False" for no crouching and no jumping
+                character.Move(agent.desiredVelocity * speed, false, false);
+            }
+            else
+            {
+                // In case the agent is not actually moving, such as when their movement is hindered by a wall
+                character.Move(Vector3.zero, false, false);
+            }
         }
         else
         {
