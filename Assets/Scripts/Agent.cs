@@ -5,6 +5,8 @@ using UnityEngine;
 using UnityEngine.AI;
 // Third person animation
 using UnityStandardAssets.Characters.ThirdPerson;
+// IEnumerator
+using System.Collections;
 
 namespace VirtualAgentsFramework
 {
@@ -24,6 +26,7 @@ namespace VirtualAgentsFramework
         private const float damping = 8;
         private Vector3 previousPosition;
         private float curSpeed;
+        private bool isMoving;
 
         // Start is called before the first frame update
         void Start()
@@ -51,25 +54,37 @@ namespace VirtualAgentsFramework
             else
             {
                 character.Move(Vector3.zero, false, false);
+                isMoving = false;
             }
         }
 
-        void WalkTo()
+        public void WalkTo(GameObject obj)
+        {
+            isMoving = true;
+            StartCoroutine(WaitUntilMotionless(obj));
+        }
+
+        private IEnumerator WaitUntilMotionless(GameObject obj)
+        {
+            Debug.Log("Moving...");
+            destination = obj;
+            agent.SetDestination(destination.transform.position);
+            yield return new WaitUntil(() => (!isMoving));
+            Debug.Log("Motionless.");
+            destination = gameObject;
+        }
+
+        public void RunTo()
         {
 
         }
 
-        void RunTo()
+        public void PlayAnimation()
         {
 
         }
 
-        void PlayAnimation()
-        {
-
-        }
-
-        void PickUp()
+        public void PickUp()
         {
 
         }
