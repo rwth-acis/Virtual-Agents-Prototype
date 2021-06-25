@@ -64,6 +64,14 @@ namespace VirtualAgentsFramework
             StartCoroutine(WaitUntilMotionless(obj));
         }
 
+        public void WalkTo(Vector3 pos)
+        {
+            isMoving = true;
+            GameObject dest = new GameObject();
+            dest.transform.position = pos;
+            StartCoroutine(WaitUntilMotionless(dest));
+        }
+
         private IEnumerator WaitUntilMotionless(GameObject obj)
         {
             Debug.Log("Moving...");
