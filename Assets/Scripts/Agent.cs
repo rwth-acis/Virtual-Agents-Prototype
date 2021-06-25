@@ -60,18 +60,13 @@ namespace VirtualAgentsFramework
                 if(distanceToTarget <= destinationReachedTreshold)
                 {
                     isMoving = false;
-                    Debug.Log("isMoving does get set to false.");
+                    //Debug.Log("isMoving does get set to false.");
                 }
             }
         }
 
         public void WalkTo(GameObject obj)
         {
-            if(!isMoving) {
-                destination = obj;
-                isMoving = true;
-                //agent.SetDestination(destination.transform.position);
-            }
             StartCoroutine(WaitUntilMotionless(obj));
         }
 
@@ -79,24 +74,25 @@ namespace VirtualAgentsFramework
         {
             GameObject obj = new GameObject();
             obj.transform.position = pos;
-            if(!isMoving) {
-                destination = obj;
-                isMoving = true;
-                agent.SetDestination(destination.transform.position);
-            }
             StartCoroutine(WaitUntilMotionless(obj));
         }
 
         private IEnumerator WaitUntilMotionless(GameObject obj)
         {
-            //agent.SetDestination(destination.transform.position);
+            // Only change the destination if the agent is not moving
+            if(!isMoving)
+            {
+                destination = obj;
+                isMoving = true;
+            }
+            // If the agent is moving, wait
             while(isMoving) {
-              Debug.Log("Moving...");
+              //Debug.Log("Moving...");
               yield return new WaitWhile(() => isMoving);
             }
-            Debug.Log("Motionless.");
+            // Set the new destination after the previous one is reached
+            //Debug.Log("Motionless.");
             destination = obj;
-            //destination = gameObject;
         }
 
         public void RunTo()
