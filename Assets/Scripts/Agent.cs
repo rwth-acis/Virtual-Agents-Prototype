@@ -22,11 +22,12 @@ namespace VirtualAgentsFramework
         //CapsuleCollider m_Capsule;
         //Animator m_Animator;
 
-        public GameObject destination;
+        [SerializeField] GameObject destination;
         private const float damping = 8;
         private Vector3 previousPosition;
         private float curSpeed;
         private bool isMoving;
+        [SerializeField] float destinationReachedTreshold;
 
         // Start is called before the first frame update
         void Start()
@@ -54,32 +55,48 @@ namespace VirtualAgentsFramework
             else
             {
                 character.Move(Vector3.zero, false, false);
-                isMoving = false;
+
+                float distanceToTarget = Vector3.Distance(gameObject.transform.position, destination.transform.position);
+                if(distanceToTarget <= destinationReachedTreshold)
+                {
+                    isMoving = false;
+                    Debug.Log("isMoving does get set to false.");
+                }
             }
         }
 
         public void WalkTo(GameObject obj)
         {
-            isMoving = true;
+            if(!isMoving) {
+                destination = obj;
+                isMoving = true;
+                //agent.SetDestination(destination.transform.position);
+            }
             StartCoroutine(WaitUntilMotionless(obj));
         }
 
         public void WalkTo(Vector3 pos)
         {
-            isMoving = true;
-            GameObject dest = new GameObject();
-            dest.transform.position = pos;
-            StartCoroutine(WaitUntilMotionless(dest));
+            GameObject obj = new GameObject();
+            obj.transform.position = pos;
+            if(!isMoving) {
+                destination = obj;
+                isMoving = true;
+                agent.SetDestination(destination.transform.position);
+            }
+            StartCoroutine(WaitUntilMotionless(obj));
         }
 
         private IEnumerator WaitUntilMotionless(GameObject obj)
         {
-            Debug.Log("Moving...");
-            destination = obj;
-            agent.SetDestination(destination.transform.position);
-            yield return new WaitUntil(() => (!isMoving));
+            //agent.SetDestination(destination.transform.position);
+            while(isMoving) {
+              Debug.Log("Moving...");
+              yield return new WaitWhile(() => isMoving);
+            }
             Debug.Log("Motionless.");
-            destination = gameObject;
+            destination = obj;
+            //destination = gameObject;
         }
 
         public void RunTo()
