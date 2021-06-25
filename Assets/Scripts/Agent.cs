@@ -20,8 +20,12 @@ namespace VirtualAgentsFramework
         // Components required by ThirdPersonCharacter
         //Rigidbody m_Rigidbody;
         //CapsuleCollider m_Capsule;
-        //Animator m_Animator;
+        Animator animator;
 
+        // Animation
+        private string currentState;
+
+        // Movement
         [SerializeField] GameObject destination;
         private const float damping = 8;
         private Vector3 previousPosition;
@@ -36,12 +40,18 @@ namespace VirtualAgentsFramework
             character = GetComponent<ThirdPersonCharacter>();
             // Disable agent rotation updates, since they are handled by the character
             agent.updateRotation = false;
+
+            // Animation
+            animator = GetComponent<Animator>();
         }
 
         // Update is called once per frame
         void Update()
         {
-            agent.SetDestination(destination.transform.position);
+            if(destination != null)
+            {
+                agent.SetDestination(destination.transform.position);
+            }
 
             Vector3 curMove = transform.position - previousPosition;
             curSpeed = curMove.magnitude / Time.deltaTime;
@@ -56,11 +66,14 @@ namespace VirtualAgentsFramework
             {
                 character.Move(Vector3.zero, false, false);
 
-                float distanceToTarget = Vector3.Distance(gameObject.transform.position, destination.transform.position);
-                if(distanceToTarget <= destinationReachedTreshold)
+                if(destination != null)
                 {
-                    isMoving = false;
-                    //Debug.Log("isMoving does get set to false.");
+                    float distanceToTarget = Vector3.Distance(gameObject.transform.position, destination.transform.position);
+                    if(distanceToTarget <= destinationReachedTreshold)
+                    {
+                        isMoving = false;
+                        //Debug.Log("isMoving does get set to false.");
+                    }
                 }
             }
         }
@@ -100,9 +113,18 @@ namespace VirtualAgentsFramework
 
         }
 
-        public void PlayAnimation()
+        public void PlayAnimation(string name)
         {
+            //TODO Make sure the agent is free / add a new task to the task queue
+            ChangeAnimationState(name);
+        }
 
+        private void ChangeAnimationState(string newState)
+        {
+            if(currentState == newState) return; // Same animation is already playing
+            animator.Play(newState);
+            currentState = newState;
+            Debug.Log(newState);
         }
 
         public void PickUp()
