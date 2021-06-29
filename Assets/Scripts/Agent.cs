@@ -238,4 +238,9 @@ namespace VirtualAgentsFramework
             taskQueue.Enqueue(task);
         }
     }
+
+    public interface IAgentTask
+    {
+        void Execute();
+    }
 }
