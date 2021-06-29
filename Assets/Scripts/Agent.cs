@@ -1,5 +1,3 @@
-//using System.Collections;
-//using System.Collections.Generic;
 using UnityEngine;
 // NavMesh
 using UnityEngine.AI;
@@ -7,6 +5,9 @@ using UnityEngine.AI;
 using UnityStandardAssets.Characters.ThirdPerson;
 // IEnumerator
 using System.Collections;
+// Tasks
+using System.Collections.Generic;
+
 
 namespace VirtualAgentsFramework
 {
@@ -152,6 +153,35 @@ namespace VirtualAgentsFramework
         public void PickUp()
         {
 
+        }
+    }
+
+    public class AgentTaskManager
+    {
+        // Can be of different kinds, but should implement the same interface
+        public class AgentTask
+        {
+
+        }
+
+        private Queue<AgentTask> taskQueue;
+
+        // Using this method, an agent can request the next task
+        public AgentTask RequestNextTask()
+        {
+            if(taskQueue.Count > 0)
+            {
+                return taskQueue.Dequeue();
+            }
+            else
+            {
+                return null;
+            }
+        }
+
+        public void AddTask(AgentTask task)
+        {
+            taskQueue.Enqueue(task);
         }
     }
 }
