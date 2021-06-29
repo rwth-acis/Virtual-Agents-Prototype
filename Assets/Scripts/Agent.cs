@@ -166,6 +166,12 @@ namespace VirtualAgentsFramework
 
         private Queue<AgentTask> taskQueue;
 
+        // Constructor
+        public AgentTaskManager()
+        {
+            taskQueue = new Queue<AgentTask>();
+        }
+
         // Using this method, an agent can request the next task
         public AgentTask RequestNextTask()
         {
