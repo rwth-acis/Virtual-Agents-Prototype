@@ -24,6 +24,7 @@ namespace VirtualAgentsFramework
 
         // Animation
         private string currentState;
+        const string idleAnimationName = "Grounded"; //CHANGE_ME
 
         // Movement
         [SerializeField] GameObject destination;
@@ -117,14 +118,35 @@ namespace VirtualAgentsFramework
         {
             //TODO Make sure the agent is free / add a new task to the task queue
             ChangeAnimationState(name);
+
         }
 
         private void ChangeAnimationState(string newState)
         {
             if(currentState == newState) return; // Same animation is already playing
             animator.Play(newState);
+            animator.SetBool("CustomAnimation", true);
             currentState = newState;
-            Debug.Log(newState);
+            //StartCoroutine("ReturnToIdle");
+            //Debug.Log(newState);
+        }
+
+        /*private IEnumerator ReturnToIdle()
+        {
+            yield return new WaitForSeconds(2f);
+            yield return new WaitUntil(() => animator.GetCurrentAnimatorStateInfo(0).normalizedTime < 1f);
+            animator.SetBool("CustomAnimation", false);
+            //animator.Play(idleAnimationName);
+            currentState = idleAnimationName;
+            //Debug.Log(idleAnimationName);
+        }*/
+
+        private void ReturnToIdle()
+        {
+            animator.SetBool("CustomAnimation", false);
+            //animator.Play(idleAnimationName);
+            currentState = idleAnimationName;
+            //Debug.Log(idleAnimationName);
         }
 
         public void PickUp()

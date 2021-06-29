@@ -21,8 +21,8 @@ public class WalkToMe : MonoBehaviour
 
     IEnumerator AgentActions()
     {
-        yield return new WaitForSeconds(5f);
-        //agent.WalkTo(gameObject);
+        yield return new WaitForSeconds(1f);
+        agent.WalkTo(gameObject);
         /*agent.WalkTo(object2);
         agent.WalkTo(new Vector3(-7,0,-5));*/
         agent.PlayAnimation("Dancing");
