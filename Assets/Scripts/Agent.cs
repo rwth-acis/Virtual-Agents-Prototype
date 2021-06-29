@@ -35,6 +35,14 @@ namespace VirtualAgentsFramework
         private bool isMoving;
         [SerializeField] float destinationReachedTreshold;
 
+        // Queue
+        private enum State
+        {
+            busy, // i.e. executing a task
+            free // i.e. idle
+        }
+        public State currentState_enum;
+
         // Start is called before the first frame update
         void Start()
         {
