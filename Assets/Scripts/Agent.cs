@@ -36,12 +36,14 @@ namespace VirtualAgentsFramework
         [SerializeField] float destinationReachedTreshold;
 
         // Queue
+        AgentTaskManager queue = null;
         private enum State
         {
-            busy, // i.e. executing a task
-            free // i.e. idle
+            inactive, // e.g. task management has not been initialized yet
+            idle,
+            busy // i.e. executing a task
         }
-        public State currentState_enum;
+        private State currentState_enum;
 
         // Start is called before the first frame update
         void Start()
@@ -53,6 +55,10 @@ namespace VirtualAgentsFramework
 
             // Animation
             animator = GetComponent<Animator>();
+
+            // Queue
+            // Agents start in the inactive state
+            currentState_enum = State.inactive;
         }
 
         // Update is called once per frame
@@ -85,6 +91,18 @@ namespace VirtualAgentsFramework
                         //Debug.Log("isMoving does get set to false.");
                     }
                 }
+            }
+
+            // Queue
+            switch(currentState_enum)
+            {
+                case State.inactive:
+                    break;
+                case State.idle:
+                    RequestNextTask();
+                    break;
+                case State.busy:
+                    break;
             }
         }
 
@@ -125,7 +143,7 @@ namespace VirtualAgentsFramework
 
         public void PlayAnimation(string name)
         {
-            //TODO Make sure the agent is free / add a new task to the task queue
+            //TODO Make sure the agent is idle / add a new task to the task queue
             ChangeAnimationState(name);
 
         }
@@ -161,6 +179,28 @@ namespace VirtualAgentsFramework
         public void PickUp()
         {
 
+        }
+
+        // ***Queue***
+
+        public void SetQueue(AgentTaskManager queue)
+        {
+            this.queue = queue;
+        }
+
+        public void RequestNextTask()
+        {
+            AgentTaskManager.AgentTask nextTask = queue.RequestNextTask();
+            if(nextTask == null)
+            {
+                // The queue is empty, keep playing the idle animation
+                currentState_enum = State.idle;
+            }
+            else
+            {
+                // Execute the task, depending on its type
+                //nextTask.Execute();
+            }
         }
     }
 

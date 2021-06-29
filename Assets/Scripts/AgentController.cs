@@ -8,18 +8,19 @@ namespace VirtualAgentsFramework
     {
         [SerializeField] Agent agent;
         [SerializeField] GameObject object2;
+        AgentTaskManager queue;
 
         // Start is called before the first frame update
         void Start()
         {
             // Wait until agent is ready
             StartCoroutine(AgentActions());
-            // Queue test
-            AgentTaskManager taskManager = new AgentTaskManager();
-            Debug.Log(taskManager.RequestNextTask());
+            // Queue
+            queue = new AgentTaskManager();
+            Debug.Log(queue.RequestNextTask());
             AgentTaskManager.AgentTask task = new AgentTaskManager.AgentTask();
-            taskManager.AddTask(task);
-            Debug.Log(taskManager.RequestNextTask());
+            queue.AddTask(task);
+            Debug.Log(queue.RequestNextTask());
         }
 
         // Update is called once per frame
