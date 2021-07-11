@@ -13,14 +13,16 @@ namespace VirtualAgentsFramework
         // Start is called before the first frame update
         void Start()
         {
-            // Wait until agent is ready
-            StartCoroutine(AgentActions());
+            // No queue: wait until agent is ready, then perform actions
+            //StartCoroutine(AgentActions());
+
             // Queue
             queue = new AgentTaskManager();
-            Debug.Log(queue.RequestNextTask());
+            agent.SetQueue(queue);
+            //Debug.Log(queue.RequestNextTask());
             AgentTaskManager.AgentTask task = new AgentTaskManager.AgentTask();
             queue.AddTask(task);
-            Debug.Log(queue.RequestNextTask());
+            //Debug.Log(queue.RequestNextTask());
         }
 
         // Update is called once per frame

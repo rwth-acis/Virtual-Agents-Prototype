@@ -111,12 +111,12 @@ namespace VirtualAgentsFramework
             StartCoroutine(WaitUntilMotionless(obj));
         }
 
-        public void WalkTo(Vector3 pos)
+        /*public void WalkTo(Vector3 pos)
         {
             GameObject obj = new GameObject();
             obj.transform.position = pos;
             StartCoroutine(WaitUntilMotionless(obj));
-        }
+        }*/
 
         private IEnumerator WaitUntilMotionless(GameObject obj)
         {
@@ -199,17 +199,73 @@ namespace VirtualAgentsFramework
             else
             {
                 // Execute the task, depending on its type
-                //nextTask.Execute();
+                nextTask.Execute(this);
             }
         }
+    }
+
+    public interface IAgentTask
+    {
+        void Execute(Agent agent);
     }
 
     public class AgentTaskManager
     {
         // Can be of different kinds, but should implement the same interface
-        public class AgentTask
+        public class AgentTask : IAgentTask
         {
+            public void Execute(Agent agent)
+            {
+            }
+        }
 
+        public class AgentMovementTask : IAgentTask
+        {
+            private GameObject destinationObject = null;
+            private Vector3 destinationCoordinates;
+            private bool run;
+
+            // Constructor with gameObject
+            public AgentMovementTask(GameObject destinationObject, bool run = false)
+            {
+                this.run = run;
+                this.destinationObject = destinationObject;
+            }
+
+            // Constructor with coordinates
+            public AgentMovementTask(Vector3 destinationCoordinates, bool run = false)
+            {
+                this.run = run;
+                this.destinationCoordinates = destinationCoordinates;
+            }
+
+            //TODO Helper function, creates a destination gameObject using coordinates
+            private void CreateDestinationObject(Vector3 destinationCoordinates)
+            {
+                destinationObject = new GameObject();
+                destinationObject.transform.position = destinationCoordinates;
+            }
+
+            public void Execute(Agent agent)
+            {
+                if(run == true)
+                {
+                    agent.RunTo();
+                }
+                else
+                {
+                    // Create a destination object if necessary
+                    if(destinationObject == null)
+                    {
+                        CreateDestinationObject(destinationCoordinates);
+                    }
+                    agent.WalkTo(destinationObject);
+                }
+                //TODO change agent's status to busy
+
+                //TODO destroy destination object if necessary
+                
+            }
         }
 
         private Queue<AgentTask> taskQueue;
@@ -248,10 +304,5 @@ namespace VirtualAgentsFramework
                 tempQueue.Enqueue(taskQueue.Dequeue());
             }
         }
-    }
-
-    public interface IAgentTask
-    {
-        void Execute();
     }
 }
