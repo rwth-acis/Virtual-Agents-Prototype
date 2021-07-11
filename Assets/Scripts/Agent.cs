@@ -64,6 +64,18 @@ namespace VirtualAgentsFramework
         // Update is called once per frame
         void Update()
         {
+            // Queue
+            switch(currentState_enum)
+            {
+                case State.inactive:
+                    break;
+                case State.idle:
+                    RequestNextTask();
+                    break;
+                case State.busy:
+                    break;
+            }
+            
             if(destination != null)
             {
                 agent.SetDestination(destination.transform.position);
@@ -72,7 +84,7 @@ namespace VirtualAgentsFramework
             Vector3 curMove = transform.position - previousPosition;
             curSpeed = curMove.magnitude / Time.deltaTime;
             previousPosition = transform.position;
-            Debug.Log(curSpeed);
+            //Debug.Log(curSpeed);
 
             if (agent.remainingDistance > agent.stoppingDistance)
             {
@@ -89,20 +101,9 @@ namespace VirtualAgentsFramework
                     {
                         isMoving = false;
                         //Debug.Log("isMoving does get set to false.");
+                        currentState_enum = State.idle;
                     }
                 }
-            }
-
-            // Queue
-            switch(currentState_enum)
-            {
-                case State.inactive:
-                    break;
-                case State.idle:
-                    RequestNextTask();
-                    break;
-                case State.busy:
-                    break;
             }
         }
 
@@ -193,13 +194,15 @@ namespace VirtualAgentsFramework
             IAgentTask nextTask = queue.RequestNextTask();
             if(nextTask == null)
             {
-                // The queue is empty, keep playing the idle animation
+                // The queue is empty, play the idle animation
                 currentState_enum = State.idle;
             }
             else
             {
                 // Execute the task, depending on its type
+                currentState_enum = State.busy;
                 nextTask.Execute(this);
+                //TODO set to idle after task execution
             }
         }
     }
@@ -281,6 +284,7 @@ namespace VirtualAgentsFramework
         {
             if(taskQueue.Count > 0)
             {
+                Debug.Log("Dequeued.");
                 return taskQueue.Dequeue();
             }
             else

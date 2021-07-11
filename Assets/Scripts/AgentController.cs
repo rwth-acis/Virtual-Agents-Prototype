@@ -21,7 +21,12 @@ namespace VirtualAgentsFramework
             agent.SetQueue(queue);
             //Debug.Log(queue.RequestNextTask());
             AgentTaskManager.AgentMovementTask task1 = new AgentTaskManager.AgentMovementTask(object2);
+            AgentTaskManager.AgentMovementTask task2 = new AgentTaskManager.AgentMovementTask(gameObject);
+            AgentTaskManager.AgentMovementTask task3 = new AgentTaskManager.AgentMovementTask(object2);
             queue.AddTask(task1);
+            queue.AddTask(task2);
+            queue.AddTask(task3);
+            queue.AddTask(task2);
             //Debug.Log(queue.RequestNextTask());
         }
 
