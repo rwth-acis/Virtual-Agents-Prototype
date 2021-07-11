@@ -29,7 +29,7 @@ namespace VirtualAgentsFramework
 
         // Movement
         [SerializeField] GameObject destination;
-        private const float damping = 8;
+        private const float damping = 7;
         private Vector3 previousPosition;
         private float curSpeed;
         private bool isMoving;
@@ -64,18 +64,6 @@ namespace VirtualAgentsFramework
         // Update is called once per frame
         void Update()
         {
-            // Queue
-            switch(currentState_enum)
-            {
-                case State.inactive:
-                    break;
-                case State.idle:
-                    RequestNextTask();
-                    break;
-                case State.busy:
-                    break;
-            }
-            
             if(destination != null)
             {
                 agent.SetDestination(destination.transform.position);
@@ -104,6 +92,18 @@ namespace VirtualAgentsFramework
                         currentState_enum = State.idle;
                     }
                 }
+            }
+
+            // Queue
+            switch(currentState_enum)
+            {
+                case State.inactive:
+                    break;
+                case State.idle:
+                    RequestNextTask();
+                    break;
+                case State.busy:
+                    break;
             }
         }
 
@@ -134,7 +134,7 @@ namespace VirtualAgentsFramework
             }
             // Set the new destination after the previous one is reached
             //Debug.Log("Motionless.");
-            destination = obj;
+            //destination = obj;
         }
 
         public void RunTo()
