@@ -237,6 +237,17 @@ namespace VirtualAgentsFramework
         {
             taskQueue.Enqueue(task);
         }
+
+        // Use this method to pass a task from the AgentController and make it jump the queue
+        public void ForceTask(AgentTask task)
+        {
+            Queue<AgentTask> tempQueue = new Queue<AgentTask>();
+            tempQueue.Enqueue(task);
+            while (taskQueue.Count > 0)
+            {
+                tempQueue.Enqueue(taskQueue.Dequeue());
+            }
+        }
     }
 
     public interface IAgentTask
