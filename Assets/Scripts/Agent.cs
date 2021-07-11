@@ -57,8 +57,8 @@ namespace VirtualAgentsFramework
             animator = GetComponent<Animator>();
 
             // Queue
-            // Agents start in the inactive state
-            currentState_enum = State.inactive;
+            //CHANGE_ME Agents start in the inactive state
+            currentState_enum = State.idle;
         }
 
         // Update is called once per frame
@@ -190,7 +190,7 @@ namespace VirtualAgentsFramework
 
         public void RequestNextTask()
         {
-            AgentTaskManager.AgentTask nextTask = queue.RequestNextTask();
+            IAgentTask nextTask = queue.RequestNextTask();
             if(nextTask == null)
             {
                 // The queue is empty, keep playing the idle animation
@@ -264,20 +264,20 @@ namespace VirtualAgentsFramework
                 //TODO change agent's status to busy
 
                 //TODO destroy destination object if necessary
-                
+
             }
         }
 
-        private Queue<AgentTask> taskQueue;
+        private Queue<IAgentTask> taskQueue;
 
         // Constructor
         public AgentTaskManager()
         {
-            taskQueue = new Queue<AgentTask>();
+            taskQueue = new Queue<IAgentTask>();
         }
 
         // Using this method, an agent can request the next task
-        public AgentTask RequestNextTask()
+        public IAgentTask RequestNextTask()
         {
             if(taskQueue.Count > 0)
             {
@@ -289,15 +289,15 @@ namespace VirtualAgentsFramework
             }
         }
 
-        public void AddTask(AgentTask task)
+        public void AddTask(IAgentTask task)
         {
             taskQueue.Enqueue(task);
         }
 
         // Use this method to pass a task from the AgentController and make it jump the queue
-        public void ForceTask(AgentTask task)
+        public void ForceTask(IAgentTask task)
         {
-            Queue<AgentTask> tempQueue = new Queue<AgentTask>();
+            Queue<IAgentTask> tempQueue = new Queue<IAgentTask>();
             tempQueue.Enqueue(task);
             while (taskQueue.Count > 0)
             {
