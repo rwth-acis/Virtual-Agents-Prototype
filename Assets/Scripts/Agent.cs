@@ -327,6 +327,7 @@ namespace VirtualAgentsFramework
             {
                 tempQueue.Enqueue(taskQueue.Dequeue());
             }
+            taskQueue = tempQueue;
         }
     }
 }

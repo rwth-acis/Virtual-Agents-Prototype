@@ -26,9 +26,9 @@ namespace VirtualAgentsFramework
             AgentTaskManager.AgentAnimationTask task4 = new AgentTaskManager.AgentAnimationTask("Dancing");
             queue.AddTask(task1);
             queue.AddTask(task2);
+            queue.ForceTask(task4);
             queue.AddTask(task3);
             queue.AddTask(task2);
-            queue.AddTask(task4);
             //Debug.Log(queue.RequestNextTask());
         }
 
