@@ -20,15 +20,17 @@ namespace VirtualAgentsFramework
             queue = new AgentTaskManager();
             agent.SetQueue(queue);
             //Debug.Log(queue.RequestNextTask());
-            AgentTaskManager.AgentMovementTask task1 = new AgentTaskManager.AgentMovementTask(object2);
-            AgentTaskManager.AgentMovementTask task2 = new AgentTaskManager.AgentMovementTask(gameObject);
-            AgentTaskManager.AgentMovementTask task3 = new AgentTaskManager.AgentMovementTask(object2);
-            AgentTaskManager.AgentAnimationTask task4 = new AgentTaskManager.AgentAnimationTask("Dancing");
-            queue.AddTask(task1);
-            queue.AddTask(task2);
-            queue.ForceTask(task4);
-            queue.AddTask(task3);
-            queue.AddTask(task2);
+            AgentTaskManager.AgentMovementTask movementTask1 = new AgentTaskManager.AgentMovementTask(object2);
+            AgentTaskManager.AgentMovementTask movementTask2 = new AgentTaskManager.AgentMovementTask(gameObject);
+            AgentTaskManager.AgentMovementTask movementTask3 = new AgentTaskManager.AgentMovementTask(object2);
+            AgentTaskManager.AgentAnimationTask animationTask1 = new AgentTaskManager.AgentAnimationTask("Dancing");
+            AgentTaskManager.AgentWaitingTask waitingTask1 = new AgentTaskManager.AgentWaitingTask(2f);
+            queue.AddTask(movementTask1);
+            queue.AddTask(movementTask2);
+            queue.ForceTask(animationTask1);
+            queue.AddTask(movementTask3);
+            queue.AddTask(waitingTask1);
+            queue.AddTask(movementTask2);
             //Debug.Log(queue.RequestNextTask());
         }
 

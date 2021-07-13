@@ -187,6 +187,18 @@ namespace VirtualAgentsFramework
 
         }
 
+        public void WaitFor(float waitingTime)
+        {
+            StartCoroutine(WaitingCoroutine(waitingTime));
+        }
+
+        private IEnumerator WaitingCoroutine(float waitingTime)
+        {
+            yield return new WaitForSeconds(2);
+            //Debug.Log("Wait ended.");
+            currentState_enum = State.idle;
+        }
+
         // ***Queue***
 
         public void SetQueue(AgentTaskManager queue)
@@ -293,7 +305,7 @@ namespace VirtualAgentsFramework
 
         public class AgentWaitingTask : IAgentTask
         {
-            private string waitingTime;
+            private float waitingTime;
 
             public AgentWaitingTask(float waitingTime)
             {
