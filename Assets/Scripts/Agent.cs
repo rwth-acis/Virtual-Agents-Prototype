@@ -32,7 +32,7 @@ namespace VirtualAgentsFramework
         private const float damping = 7;
         private Vector3 previousPosition;
         private float curSpeed;
-        private bool isMoving;
+        public bool isMoving;
         [SerializeField] float destinationReachedTreshold;
 
         // Queue
@@ -87,9 +87,12 @@ namespace VirtualAgentsFramework
                     float distanceToTarget = Vector3.Distance(gameObject.transform.position, destination.transform.position);
                     if(distanceToTarget <= destinationReachedTreshold)
                     {
-                        isMoving = false;
+                        if (isMoving == true)
+                        {
+                            isMoving = false;
+                            currentState_enum = State.idle;
+                        }
                         //Debug.Log("isMoving does get set to false.");
-                        currentState_enum = State.idle;
                     }
                 }
             }
@@ -135,6 +138,7 @@ namespace VirtualAgentsFramework
             // Set the new destination after the previous one is reached
             //Debug.Log("Motionless.");
             //destination = obj;
+            isMoving = false;
         }
 
         public void RunTo()
@@ -175,6 +179,7 @@ namespace VirtualAgentsFramework
             //animator.Play(idleAnimationName);
             currentState = idleAnimationName;
             //Debug.Log(idleAnimationName);
+            currentState_enum = State.idle;
         }
 
         public void PickUp()
@@ -265,9 +270,24 @@ namespace VirtualAgentsFramework
                     agent.WalkTo(destinationObject);
                 }
                 //TODO change agent's status to busy
-
+                agent.isMoving = true;
                 //TODO destroy destination object if necessary
 
+            }
+        }
+
+        public class AgentAnimationTask : IAgentTask
+        {
+            private string animationName;
+
+            public AgentAnimationTask(string animationName)
+            {
+                this.animationName = animationName;
+            }
+
+            public void Execute(Agent agent)
+            {
+                agent.PlayAnimation(animationName);
             }
         }
 
