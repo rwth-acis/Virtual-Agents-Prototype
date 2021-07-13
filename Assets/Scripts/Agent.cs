@@ -29,7 +29,9 @@ namespace VirtualAgentsFramework
 
         // Movement
         [SerializeField] GameObject destination;
-        private const float damping = 7;
+        private float damping = 6;
+        private const float walkingSpeed = 1.8f;
+        private const float runningSpeed = 4;
         private Vector3 previousPosition;
         private float curSpeed;
         public bool isMoving;
@@ -112,6 +114,7 @@ namespace VirtualAgentsFramework
 
         public void WalkTo(GameObject obj)
         {
+            agent.speed = walkingSpeed;
             StartCoroutine(WaitUntilMotionless(obj));
         }
 
@@ -141,9 +144,10 @@ namespace VirtualAgentsFramework
             isMoving = false;
         }
 
-        public void RunTo()
+        public void RunTo(GameObject obj)
         {
-
+            agent.speed = runningSpeed;
+            StartCoroutine(WaitUntilMotionless(obj));
         }
 
         public void PlayAnimation(string name)
@@ -268,20 +272,21 @@ namespace VirtualAgentsFramework
 
             public void Execute(Agent agent)
             {
+                // Create a destination object if necessary
+                if(destinationObject == null)
+                {
+                    CreateDestinationObject(destinationCoordinates);
+                }
+
                 if(run == true)
                 {
-                    agent.RunTo();
+                    agent.RunTo(destinationObject);
                 }
                 else
                 {
-                    // Create a destination object if necessary
-                    if(destinationObject == null)
-                    {
-                        CreateDestinationObject(destinationCoordinates);
-                    }
                     agent.WalkTo(destinationObject);
                 }
-                //TODO change agent's status to busy
+                // Change agent's status to moving (busy)
                 agent.isMoving = true;
                 //TODO destroy destination object if necessary
 
@@ -331,7 +336,7 @@ namespace VirtualAgentsFramework
         {
             if(taskQueue.Count > 0)
             {
-                Debug.Log("Dequeued.");
+                //Debug.Log("Dequeued.");
                 return taskQueue.Dequeue();
             }
             else
