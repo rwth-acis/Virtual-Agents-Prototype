@@ -291,6 +291,21 @@ namespace VirtualAgentsFramework
             }
         }
 
+        public class AgentWaitingTask : IAgentTask
+        {
+            private string waitingTime;
+
+            public AgentWaitingTask(float waitingTime)
+            {
+                this.waitingTime = waitingTime;
+            }
+
+            public void Execute(Agent agent)
+            {
+                agent.WaitFor(waitingTime);
+            }
+        }
+
         private Queue<IAgentTask> taskQueue;
 
         // Constructor
