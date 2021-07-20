@@ -59,7 +59,7 @@ namespace VirtualAgentsFramework
             animator = GetComponent<Animator>();
 
             // Queue
-            //CHANGE_ME Agents start in the inactive state
+            //CHANGE_ME Agents start in the idle state
             currentState_enum = State.idle;
         }
 
@@ -115,7 +115,8 @@ namespace VirtualAgentsFramework
         public void WalkTo(GameObject obj)
         {
             agent.speed = walkingSpeed;
-            StartCoroutine(WaitUntilMotionless(obj));
+            destination = obj;
+            isMoving = true;
         }
 
         /*public void WalkTo(Vector3 pos)
@@ -125,29 +126,11 @@ namespace VirtualAgentsFramework
             StartCoroutine(WaitUntilMotionless(obj));
         }*/
 
-        private IEnumerator WaitUntilMotionless(GameObject obj)
-        {
-            // Only change the destination if the agent is not moving
-            if(!isMoving)
-            {
-                destination = obj;
-                isMoving = true;
-            }
-            // If the agent is moving, wait
-            while(isMoving) {
-              //Debug.Log("Moving...");
-              yield return new WaitWhile(() => isMoving);
-            }
-            // Set the new destination after the previous one is reached
-            //Debug.Log("Motionless.");
-            //destination = obj;
-            isMoving = false;
-        }
-
         public void RunTo(GameObject obj)
         {
             agent.speed = runningSpeed;
-            StartCoroutine(WaitUntilMotionless(obj));
+            destination = obj;
+            isMoving = true;
         }
 
         public void PlayAnimation(string name)
