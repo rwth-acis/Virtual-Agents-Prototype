@@ -7,7 +7,7 @@ using UnityStandardAssets.Characters.ThirdPerson;
 using System.Collections;
 // Tasks
 using System.Collections.Generic;
-
+using VirtualAgentsFramework.AgentTasks;
 
 namespace VirtualAgentsFramework
 {
@@ -187,20 +187,11 @@ namespace VirtualAgentsFramework
             }
         }
     }
-
-    public interface IAgentTask
+    namespace AgentTasks
     {
-        void Execute(Agent agent);
-    }
-
-    public class AgentTaskManager
-    {
-        // Can be of different kinds, but should implement the same interface
-        public class AgentTask : IAgentTask
+        public interface IAgentTask
         {
-            public void Execute(Agent agent)
-            {
-            }
+            void Execute(Agent agent);
         }
 
         public class AgentMovementTask : IAgentTask
@@ -283,43 +274,45 @@ namespace VirtualAgentsFramework
             }
         }
 
-        private Queue<IAgentTask> taskQueue;
-
-        // Constructor
-        public AgentTaskManager()
+        public class AgentTaskManager
         {
-            taskQueue = new Queue<IAgentTask>();
-        }
+            private Queue<IAgentTask> taskQueue;
 
-        // Using this method, an agent can request the next task
-        public IAgentTask RequestNextTask()
-        {
-            if(taskQueue.Count > 0)
+            // Constructor
+            public AgentTaskManager()
             {
-                //Debug.Log("Dequeued.");
-                return taskQueue.Dequeue();
+                taskQueue = new Queue<IAgentTask>();
             }
-            else
-            {
-                return null;
-            }
-        }
 
-        public void AddTask(IAgentTask task)
-        {
-            taskQueue.Enqueue(task);
-        }
-
-        // Use this method to pass a task from the AgentController and make it jump the queue
-        public void ForceTask(IAgentTask task)
-        {
-            Queue<IAgentTask> tempQueue = new Queue<IAgentTask>();
-            tempQueue.Enqueue(task);
-            while (taskQueue.Count > 0)
+            // Using this method, an agent can request the next task
+            public IAgentTask RequestNextTask()
             {
-                tempQueue.Enqueue(taskQueue.Dequeue());
+                if(taskQueue.Count > 0)
+                {
+                    return taskQueue.Dequeue();
+                }
+                else
+                {
+                    return null;
+                }
             }
-            taskQueue = tempQueue;
+
+            public void AddTask(IAgentTask task)
+            {
+                taskQueue.Enqueue(task);
+            }
+
+            // Use this method to pass a task from the AgentController and make it jump the queue
+            public void ForceTask(IAgentTask task)
+            {
+                Queue<IAgentTask> tempQueue = new Queue<IAgentTask>();
+                tempQueue.Enqueue(task);
+                while (taskQueue.Count > 0)
+                {
+                    tempQueue.Enqueue(taskQueue.Dequeue());
+                }
+                taskQueue = tempQueue;
+            }
         }
     }
 }

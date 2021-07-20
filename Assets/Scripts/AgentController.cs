@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
-using VirtualAgentsFramework;
+using VirtualAgentsFramework.AgentTasks;
 
 namespace VirtualAgentsFramework
 {
@@ -20,11 +20,11 @@ namespace VirtualAgentsFramework
             queue = new AgentTaskManager();
             agent.SetQueue(queue);
             // Create tasks
-            AgentTaskManager.AgentMovementTask movementTask1 = new AgentTaskManager.AgentMovementTask(object2, true);
-            AgentTaskManager.AgentMovementTask movementTask2 = new AgentTaskManager.AgentMovementTask(gameObject);
-            AgentTaskManager.AgentMovementTask movementTask3 = new AgentTaskManager.AgentMovementTask(object2);
-            AgentTaskManager.AgentAnimationTask animationTask1 = new AgentTaskManager.AgentAnimationTask("Dancing");
-            AgentTaskManager.AgentWaitingTask waitingTask1 = new AgentTaskManager.AgentWaitingTask(2f);
+            AgentMovementTask movementTask1 = new AgentMovementTask(object2, true);
+            AgentMovementTask movementTask2 = new AgentMovementTask(gameObject);
+            AgentMovementTask movementTask3 = new AgentMovementTask(object2);
+            AgentAnimationTask animationTask1 = new AgentAnimationTask("Dancing");
+            AgentWaitingTask waitingTask1 = new AgentWaitingTask(2f);
             // Queue tasks
             queue.AddTask(movementTask1);     // Run to object 2
             queue.AddTask(movementTask2);     // Walk to object 1
