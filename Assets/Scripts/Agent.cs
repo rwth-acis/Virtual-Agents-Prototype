@@ -83,7 +83,7 @@ namespace VirtualAgentsFramework
             else
             {
                 character.Move(Vector3.zero, false, false);
-
+                // Check if the agent has really reached its destination
                 if(destination != null)
                 {
                     float distanceToTarget = Vector3.Distance(gameObject.transform.position, destination.transform.position);
@@ -94,7 +94,6 @@ namespace VirtualAgentsFramework
                             isMoving = false;
                             currentState_enum = State.idle;
                         }
-                        //Debug.Log("isMoving does get set to false.");
                     }
                 }
             }
@@ -119,13 +118,6 @@ namespace VirtualAgentsFramework
             isMoving = true;
         }
 
-        /*public void WalkTo(Vector3 pos)
-        {
-            GameObject obj = new GameObject();
-            obj.transform.position = pos;
-            StartCoroutine(WaitUntilMotionless(obj));
-        }*/
-
         public void RunTo(GameObject obj)
         {
             agent.speed = runningSpeed;
@@ -135,9 +127,7 @@ namespace VirtualAgentsFramework
 
         public void PlayAnimation(string name)
         {
-            //TODO Make sure the agent is idle / add a new task to the task queue
             ChangeAnimationState(name);
-
         }
 
         private void ChangeAnimationState(string newState)
@@ -146,19 +136,7 @@ namespace VirtualAgentsFramework
             animator.Play(newState);
             animator.SetBool("CustomAnimation", true);
             currentState = newState;
-            //StartCoroutine("ReturnToIdle");
-            //Debug.Log(newState);
         }
-
-        /*private IEnumerator ReturnToIdle()
-        {
-            yield return new WaitForSeconds(2f);
-            yield return new WaitUntil(() => animator.GetCurrentAnimatorStateInfo(0).normalizedTime < 1f);
-            animator.SetBool("CustomAnimation", false);
-            //animator.Play(idleAnimationName);
-            currentState = idleAnimationName;
-            //Debug.Log(idleAnimationName);
-        }*/
 
         private void ReturnToIdle()
         {
@@ -182,7 +160,6 @@ namespace VirtualAgentsFramework
         private IEnumerator WaitingCoroutine(float waitingTime)
         {
             yield return new WaitForSeconds(2);
-            //Debug.Log("Wait ended.");
             currentState_enum = State.idle;
         }
 
