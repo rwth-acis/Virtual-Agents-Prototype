@@ -24,7 +24,7 @@ namespace VirtualAgentsFramework
         Animator animator;
 
         // Queue
-        AgentTaskManager queue = null;
+        private AgentTaskManager queue = new AgentTaskManager();
         public enum State
         {
             inactive, // e.g. task management has not been initialized yet
@@ -47,6 +47,7 @@ namespace VirtualAgentsFramework
 
             // Queue
             //CHANGE_ME Agents start in the idle state
+            //queue = new AgentTaskManager();
             currentState_enum = State.idle;
         }
 
@@ -80,13 +81,17 @@ namespace VirtualAgentsFramework
         }
 
         // ***Queue***
-
-        public void SetQueue(AgentTaskManager queue)
+        public void AddTask(IAgentTask task)
         {
-            this.queue = queue;
+            queue.AddTask(task);
         }
 
-        public void RequestNextTask()
+        public void ForceTask(IAgentTask task)
+        {
+            queue.ForceTask(task);
+        }
+
+        private void RequestNextTask()
         {
             IAgentTask nextTask = queue.RequestNextTask();
             if(nextTask == null)
@@ -299,6 +304,7 @@ namespace VirtualAgentsFramework
             public AgentTaskManager()
             {
                 taskQueue = new Queue<IAgentTask>();
+                taskQueue.Clear();
             }
 
             // Using this method, an agent can request the next task

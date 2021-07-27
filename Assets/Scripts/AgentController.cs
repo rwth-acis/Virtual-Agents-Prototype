@@ -17,8 +17,6 @@ namespace VirtualAgentsFramework
             //StartCoroutine(AgentActions());
 
             // Queue
-            queue = new AgentTaskManager();
-            agent.SetQueue(queue);
             // Create tasks
             AgentMovementTask movementTask1 = new AgentMovementTask(object2, true);
             AgentMovementTask movementTask2 = new AgentMovementTask(gameObject);
@@ -26,12 +24,12 @@ namespace VirtualAgentsFramework
             AgentAnimationTask animationTask1 = new AgentAnimationTask("Dancing");
             AgentWaitingTask waitingTask1 = new AgentWaitingTask(2f);
             // Queue tasks
-            queue.AddTask(movementTask1);     // Run to object 2
-            queue.AddTask(movementTask2);     // Walk to object 1
-            queue.ForceTask(animationTask1);  // Dance
-            queue.AddTask(movementTask3);     // Walk to object 2
-            queue.AddTask(waitingTask1);      // Wait for 2 seconds
-            queue.AddTask(movementTask2);     // Walk to object 1
+            agent.AddTask(movementTask1);     // Run to object 2
+            agent.AddTask(movementTask2);     // Walk to object 1
+            agent.ForceTask(animationTask1);  // Dance
+            agent.AddTask(movementTask3);     // Walk to object 2
+            agent.AddTask(waitingTask1);      // Wait for 2 seconds
+            agent.AddTask(movementTask2);     // Walk to object 1
         }
 
         // Update is called once per frame
