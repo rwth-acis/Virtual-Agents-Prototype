@@ -10,15 +10,13 @@ namespace VirtualAgentsFramework
         [SerializeField] GameObject object2;
         AgentTaskManager queue;
 
-        // Start is called before the first frame update
         void Start()
         {
-            // Solution wihout a queue: wait until agent is ready, then perform actions
-            //StartCoroutine(AgentActions());
+            // ***Queue management***
 
-            // Queue
+            // Option 1: create and assign tasks manually
             // Create tasks
-            AgentMovementTask movementTask1 = new AgentMovementTask(object2, true);
+            /*AgentMovementTask movementTask1 = new AgentMovementTask(object2, true);
             AgentMovementTask movementTask2 = new AgentMovementTask(gameObject);
             AgentMovementTask movementTask3 = new AgentMovementTask(object2);
             AgentAnimationTask animationTask1 = new AgentAnimationTask("Dancing");
@@ -29,24 +27,17 @@ namespace VirtualAgentsFramework
             agent.ForceTask(animationTask1);  // Dance
             agent.AddTask(movementTask3);     // Walk to object 2
             agent.AddTask(waitingTask1);      // Wait for 2 seconds
-            agent.AddTask(movementTask2);     // Walk to object 1
-        }
+            agent.AddTask(movementTask2);     // Walk to object 1*/
 
-        // Update is called once per frame
-        void Update()
-        {
-
-        }
-
-        /*IEnumerator AgentActions()
-        {
-            yield return new WaitForSeconds(1f);
-            //agent.WalkTo(gameObject);
-            //agent.WalkTo(object2);
-            //agent.WalkTo(new Vector3(-7,0,-5));
-            agent.PlayAnimation("Dancing");
-            yield return new WaitForSeconds(5f);
+            //Option 2: use shortcuts
+            agent.RunTo(object2);
             agent.WalkTo(gameObject);
-        }*/
+            agent.PlayAnimation("Dancing", true); // true forces the task
+            agent.WalkTo(object2);
+            agent.WaitForSeconds(2f);
+            agent.WalkTo(gameObject);
+        }
+
+        void Update() {}
     }
 }

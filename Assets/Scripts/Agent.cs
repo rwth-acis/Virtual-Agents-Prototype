@@ -80,7 +80,7 @@ namespace VirtualAgentsFramework
 
         }
 
-        // ***Queue***
+        // Queue managenent functions
         public void AddTask(IAgentTask task)
         {
             queue.AddTask(task);
@@ -108,7 +108,57 @@ namespace VirtualAgentsFramework
                 //TODO set to idle after task execution
             }
         }
+
+        // Shortcut queue management functions
+        public void WalkTo(GameObject destinationObject, bool force = false)
+        {
+            AgentMovementTask movementTask = new AgentMovementTask(destinationObject);
+            ScheduleOrForce(movementTask, force);
+        }
+
+        public void WalkTo(Vector3 destinationCoordinates, bool force = false)
+        {
+            AgentMovementTask movementTask = new AgentMovementTask(destinationCoordinates);
+            ScheduleOrForce(movementTask, force);
+        }
+
+        public void RunTo(GameObject destinationObject, bool force = false)
+        {
+            AgentMovementTask movementTask = new AgentMovementTask(destinationObject, true);
+            ScheduleOrForce(movementTask, force);
+        }
+
+        public void RunTo(Vector3 destinationCoordinates, bool force = false)
+        {
+            AgentMovementTask movementTask = new AgentMovementTask(destinationCoordinates, true);
+            ScheduleOrForce(movementTask, force);
+        }
+
+        public void PlayAnimation(string animationName, bool force = false)
+        {
+            AgentAnimationTask animationTask = new AgentAnimationTask(animationName);
+            ScheduleOrForce(animationTask, force);
+        }
+
+        public void WaitForSeconds(float secondsWaiting, bool force = false)
+        {
+            AgentWaitingTask waitingTask = new AgentWaitingTask(secondsWaiting);
+            ScheduleOrForce(waitingTask, force);
+        }
+
+        public void ScheduleOrForce(IAgentTask task, bool force)
+        {
+            if(force == true)
+            {
+                queue.ForceTask(task);
+            }
+            else
+            {
+                queue.AddTask(task);
+            }
+        }
     }
+
     namespace AgentTasks
     {
         public interface IAgentTask
