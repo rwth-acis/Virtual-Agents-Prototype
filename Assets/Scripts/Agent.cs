@@ -18,12 +18,6 @@ namespace VirtualAgentsFramework
     public class Agent : MonoBehaviour
     {
         private NavMeshAgent agent;
-        private ThirdPersonCharacter character;
-
-        // Components required by ThirdPersonCharacter
-        //Rigidbody m_Rigidbody;
-        //CapsuleCollider m_Capsule;
-        Animator animator;
 
         // Queue
         private AgentTaskManager queue = new AgentTaskManager();
@@ -33,31 +27,25 @@ namespace VirtualAgentsFramework
             idle,
             busy // i.e. executing a task
         }
-        private State currentState_enum;
+        private State currentState;
         IAgentTask currentTask;
 
-        // Start is called before the first frame update
         void Start()
         {
             agent = GetComponent<NavMeshAgent>();
-            //character = GetComponent<ThirdPersonCharacter>(); //OBSOLETE
-            // Disable agent rotation updates, since they are handled by the character
+            // Disable NavMeshAgent rotation updates, since they are handled by ThirdPersonCharacter
             agent.updateRotation = false;
 
-            // Animation
-            //animator = GetComponent<Animator>(); //OBSOLETE
-
             // Queue
-            //CHANGE_ME Agents start in the idle state
-            //queue = new AgentTaskManager();
-            currentState_enum = State.idle;
+            // Agents start in the idle state. CHANGE_ME to inactive to disable task dispatching
+            currentState = State.idle;
         }
 
         // Update is called once per frame
         void Update()
         {
             // Queue
-            switch(currentState_enum)
+            switch(currentState)
             {
                 case State.inactive:
                     break;
@@ -70,16 +58,11 @@ namespace VirtualAgentsFramework
             }
         }
 
-        // Animation (required for the Animator event to work)
+        // This method gets triggered by the Animator event
         public void ReturnToIdle()
         {
             AgentAnimationTask currentAnimationTask = (AgentAnimationTask)currentTask;
             currentAnimationTask.ReturnToIdle();
-        }
-
-        public void PickUp()
-        {
-
         }
 
         // Queue managenent functions
@@ -99,12 +82,12 @@ namespace VirtualAgentsFramework
             if(nextTask == null)
             {
                 // The queue is empty, play the idle animation
-                currentState_enum = State.idle;
+                currentState = State.idle;
             }
             else
             {
                 // Execute the task, depending on its type
-                currentState_enum = State.busy;
+                currentState = State.busy;
                 nextTask.Execute(this);
                 currentTask = nextTask;
                 // Subscribe to the task's OnTaskFinished event to set the agent's state to idle upon task execution
@@ -112,9 +95,10 @@ namespace VirtualAgentsFramework
             }
         }
 
+        // Helper function to be called upon task execution
         void SetAgentStateToIdle()
         {
-            currentState_enum = State.idle;
+            currentState = State.idle;
             // Additionally, unsubscribe from the event
             currentTask.OnTaskFinished -= SetAgentStateToIdle;
         }
@@ -154,6 +138,12 @@ namespace VirtualAgentsFramework
         {
             AgentWaitingTask waitingTask = new AgentWaitingTask(secondsWaiting);
             ScheduleOrForce(waitingTask, force);
+        }
+
+        //TODO
+        public void PickUp()
+        {
+
         }
 
         public void ScheduleOrForce(IAgentTask task, bool force)
