@@ -8,6 +8,8 @@ using System.Collections;
 // Tasks
 using System.Collections.Generic;
 using VirtualAgentsFramework.AgentTasks;
+// Action
+using System;
 
 namespace VirtualAgentsFramework
 {
@@ -25,13 +27,13 @@ namespace VirtualAgentsFramework
 
         // Queue
         private AgentTaskManager queue = new AgentTaskManager();
-        public enum State
+        private enum State
         {
             inactive, // e.g. task management has not been initialized yet
             idle,
             busy // i.e. executing a task
         }
-        public State currentState_enum;
+        private State currentState_enum;
         IAgentTask currentTask;
 
         // Start is called before the first frame update
@@ -105,8 +107,16 @@ namespace VirtualAgentsFramework
                 currentState_enum = State.busy;
                 nextTask.Execute(this);
                 currentTask = nextTask;
-                //TODO set to idle after task execution
+                // Subscribe to the task's OnTaskFinished event to set the agent's state to idle upon task execution
+                currentTask.OnTaskFinished += SetAgentStateToIdle;
             }
+        }
+
+        void SetAgentStateToIdle()
+        {
+            currentState_enum = State.idle;
+            // Additionally, unsubscribe from the event
+            currentTask.OnTaskFinished -= SetAgentStateToIdle;
         }
 
         // Shortcut queue management functions
@@ -165,6 +175,7 @@ namespace VirtualAgentsFramework
         {
             void Execute(Agent agent);
             void Update();
+            event Action OnTaskFinished;
         }
 
         public class AgentMovementTask : IAgentTask
@@ -187,6 +198,8 @@ namespace VirtualAgentsFramework
             NavMeshAgent navMeshAgent;
             ThirdPersonCharacter thirdPersonCharacter;
 
+            public event Action OnTaskFinished;
+
             // Constructor with gameObject
             public AgentMovementTask(GameObject destinationObject, bool run = false)
             {
@@ -201,7 +214,7 @@ namespace VirtualAgentsFramework
                 this.destinationCoordinates = destinationCoordinates;
             }
 
-            //TODO Helper function, creates a destination gameObject using coordinates
+            // Helper function, creates a destination gameObject using coordinates
             private void CreateDestinationObject(Vector3 destinationCoordinates)
             {
                 destinationObject = new GameObject();
@@ -261,7 +274,7 @@ namespace VirtualAgentsFramework
                             if (isMoving == true)
                             {
                                 isMoving = false;
-                                agent.currentState_enum = Agent.State.idle; //TODO Event
+                                OnTaskFinished();
                             }
                         }
                     }
@@ -280,6 +293,8 @@ namespace VirtualAgentsFramework
             private Animator animator;
 
             private Agent agent;
+
+            public event Action OnTaskFinished;
 
             public AgentAnimationTask(string animationName)
             {
@@ -312,7 +327,7 @@ namespace VirtualAgentsFramework
                 //animator.Play(idleAnimationName);
                 currentState = idleAnimationName;
                 //Debug.Log(idleAnimationName);
-                agent.currentState_enum = Agent.State.idle; //TODO Event
+                OnTaskFinished();
             }
 
             public void Update()
@@ -325,6 +340,8 @@ namespace VirtualAgentsFramework
         {
             private float waitingTime;
             private Agent agent;
+
+            public event Action OnTaskFinished;
 
             public AgentWaitingTask(float waitingTime)
             {
@@ -342,7 +359,7 @@ namespace VirtualAgentsFramework
             private IEnumerator WaitingCoroutine(float waitingTime)
             {
                 yield return new WaitForSeconds(2);
-                agent.currentState_enum = Agent.State.idle;
+                OnTaskFinished();
             }
         }
 
