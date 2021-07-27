@@ -8,7 +8,6 @@ namespace VirtualAgentsFramework
     {
         [SerializeField] Agent agent;
         [SerializeField] GameObject object2;
-        AgentTaskManager queue;
 
         void Start()
         {
