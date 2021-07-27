@@ -28,7 +28,7 @@ namespace VirtualAgentsFramework
             busy // i.e. executing a task
         }
         private State currentState;
-        IAgentTask currentTask;
+        private IAgentTask currentTask;
 
         void Start()
         {
@@ -170,23 +170,22 @@ namespace VirtualAgentsFramework
 
         public class AgentMovementTask : IAgentTask
         {
-            private GameObject destinationObject = null;
-            private Vector3 destinationCoordinates;
-            private bool run;
-
-            // Movement
-            GameObject destination;
-            private float damping = 6;
-            private const float walkingSpeed = 1.8f;
-            private const float runningSpeed = 4;
-            private Vector3 previousPosition;
-            private float curSpeed;
-            public bool isMoving;
-            float destinationReachedTreshold = 1.5f;
-
             Agent agent;
             NavMeshAgent navMeshAgent;
             ThirdPersonCharacter thirdPersonCharacter;
+
+            private GameObject destinationObject = null;
+            private bool run;
+
+            private const float walkingSpeed = 1.8f;
+            private const float runningSpeed = 4;
+            private const float damping = 6;
+
+            private Vector3 previousPosition;
+            private float curSpeed;
+
+            private bool isMoving;
+            private const float destinationReachedTreshold = 1.5f;
 
             public event Action OnTaskFinished;
 
@@ -194,14 +193,14 @@ namespace VirtualAgentsFramework
             public AgentMovementTask(GameObject destinationObject, bool run = false)
             {
                 this.run = run;
-                this.destinationObject = destinationObject;
+                this.destinationObject = destinationObject; //TODO raise exception if null
             }
 
             // Constructor with coordinates
             public AgentMovementTask(Vector3 destinationCoordinates, bool run = false)
             {
                 this.run = run;
-                this.destinationCoordinates = destinationCoordinates;
+                CreateDestinationObject(destinationCoordinates);
             }
 
             // Helper function, creates a destination gameObject using coordinates
@@ -216,11 +215,7 @@ namespace VirtualAgentsFramework
                 this.agent = agent;
                 navMeshAgent = agent.GetComponent<NavMeshAgent>();
                 thirdPersonCharacter = agent.GetComponent<ThirdPersonCharacter>();
-                // Create a destination object if necessary
-                if(destinationObject == null)
-                {
-                    CreateDestinationObject(destinationCoordinates);
-                }
+
                 // Set running or walking speed
                 if(run == true)
                 {
@@ -230,24 +225,25 @@ namespace VirtualAgentsFramework
                 {
                     navMeshAgent.speed = walkingSpeed;
                 }
-                // Set destination
-                destination = destinationObject; //DUPLICATE
+
                 // Change agent's status to moving (busy)
                 isMoving = true;
-                //TODO destroy destination object if necessary
+                //TODO destroy destination object upon execution (if one was created)
             }
 
             public void Update()
             {
-                if(destination != null)
+                if(destinationObject != null)
                 {
-                    navMeshAgent.SetDestination(destination.transform.position);
+                    navMeshAgent.SetDestination(destinationObject.transform.position);
                 }
 
+                // Calculate actual speed
                 Vector3 curMove = agent.transform.position - previousPosition;
                 curSpeed = curMove.magnitude / Time.deltaTime;
                 previousPosition = agent.transform.position;
 
+                // Control movement
                 if (navMeshAgent.remainingDistance > navMeshAgent.stoppingDistance)
                 {
                     thirdPersonCharacter.Move(navMeshAgent.desiredVelocity * curSpeed/damping, false, false);
@@ -256,9 +252,9 @@ namespace VirtualAgentsFramework
                 {
                     thirdPersonCharacter.Move(Vector3.zero, false, false);
                     // Check if the agent has really reached its destination
-                    if(destination != null)
+                    if(destinationObject != null)
                     {
-                        float distanceToTarget = Vector3.Distance(agent.gameObject.transform.position, destination.transform.position);
+                        float distanceToTarget = Vector3.Distance(agent.gameObject.transform.position, destinationObject.transform.position);
                         if(distanceToTarget <= destinationReachedTreshold)
                         {
                             if (isMoving == true)
@@ -274,18 +270,16 @@ namespace VirtualAgentsFramework
 
         public class AgentAnimationTask : IAgentTask
         {
-            private string animationName;
-
-            // Animation
-            private string currentState;
-            const string idleAnimationName = "Grounded"; //CHANGE_ME
-
+            private Agent agent;
             private Animator animator;
 
-            private Agent agent;
+            private string currentState;
+            private const string idleAnimationName = "Grounded"; // CHANGE_ME
+            private string animationName;
 
             public event Action OnTaskFinished;
 
+            // Constructor
             public AgentAnimationTask(string animationName)
             {
                 this.animationName = animationName;
@@ -295,12 +289,7 @@ namespace VirtualAgentsFramework
             {
                 this.agent = agent;
                 animator = agent.GetComponent<Animator>();
-                PlayAnimation(animationName);
-            }
-
-            public void PlayAnimation(string name)
-            {
-                ChangeAnimationState(name);
+                ChangeAnimationState(animationName);
             }
 
             private void ChangeAnimationState(string newState)
@@ -311,28 +300,25 @@ namespace VirtualAgentsFramework
                 currentState = newState;
             }
 
+            // Gets called by the agent in response to the Animator's event
             public void ReturnToIdle()
             {
                 animator.SetBool("CustomAnimation", false);
-                //animator.Play(idleAnimationName);
                 currentState = idleAnimationName;
-                //Debug.Log(idleAnimationName);
                 OnTaskFinished();
             }
 
-            public void Update()
-            {
-
-            }
+            public void Update() {}
         }
 
         public class AgentWaitingTask : IAgentTask
         {
-            private float waitingTime;
             private Agent agent;
+            private float waitingTime;
 
             public event Action OnTaskFinished;
 
+            // Constructor
             public AgentWaitingTask(float waitingTime)
             {
                 this.waitingTime = waitingTime;
@@ -344,13 +330,13 @@ namespace VirtualAgentsFramework
                 agent.StartCoroutine(WaitingCoroutine(waitingTime));
             }
 
-            public void Update() {}
-
             private IEnumerator WaitingCoroutine(float waitingTime)
             {
-                yield return new WaitForSeconds(2);
+                yield return new WaitForSeconds(waitingTime);
                 OnTaskFinished();
             }
+
+            public void Update() {}
         }
 
         public class AgentTaskManager
