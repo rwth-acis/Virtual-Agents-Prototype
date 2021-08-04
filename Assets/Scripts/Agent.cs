@@ -103,7 +103,7 @@ namespace VirtualAgentsFramework
         /// Execute a task as soon as possible
         /// </summary>
         /// <param name="task">Task to be executed</param>
-        public void ExecuteTask(IAgentTask task)
+        public void ExecuteTaskASAP(IAgentTask task)
         {
             queue.ForceTask(task);
         }
