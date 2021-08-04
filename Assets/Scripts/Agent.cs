@@ -149,11 +149,11 @@ namespace VirtualAgentsFramework
         /// Shortcut queue management function
         /// </summary>
         /// <param name="destinationObject">GameObject the agent should walk to</param>
-        /// <param name="force">true if the task's execution should be forced, false if the task should be scheduled</param>
-        public void WalkTo(GameObject destinationObject, bool force = false)
+        /// <param name="asap">true if the task should be executed as soon as possible, false if the task should be scheduled</param>
+        public void WalkTo(GameObject destinationObject, bool asap = false)
         {
             AgentMovementTask movementTask = new AgentMovementTask(destinationObject);
-            ScheduleOrForce(movementTask, force);
+            ScheduleOrForce(movementTask, asap);
         }
 
         /// <summary>
@@ -161,11 +161,11 @@ namespace VirtualAgentsFramework
         /// Shortcut queue management function
         /// </summary>
         /// <param name="destinationCoordinates">Position the agent should walk to</param>
-        /// <param name="force">true if the task's execution should be forced, false if the task should be scheduled</param>
-        public void WalkTo(Vector3 destinationCoordinates, bool force = false)
+        /// <param name="asap">true if the task should be executed as soon as possible, false if the task should be scheduled</param>
+        public void WalkTo(Vector3 destinationCoordinates, bool asap = false)
         {
             AgentMovementTask movementTask = new AgentMovementTask(destinationCoordinates);
-            ScheduleOrForce(movementTask, force);
+            ScheduleOrForce(movementTask, asap);
         }
 
         /// <summary>
@@ -173,11 +173,11 @@ namespace VirtualAgentsFramework
         /// Shortcut queue management function
         /// </summary>
         /// <param name="destinationObject">GameObject the agent should run to</param>
-        /// <param name="force">true if the task's execution should be forced, false if the task should be scheduled</param>
-        public void RunTo(GameObject destinationObject, bool force = false)
+        /// <param name="asap">true if the task should be executed as soon as possible, false if the task should be scheduled</param>
+        public void RunTo(GameObject destinationObject, bool asap = false)
         {
             AgentMovementTask movementTask = new AgentMovementTask(destinationObject, true);
-            ScheduleOrForce(movementTask, force);
+            ScheduleOrForce(movementTask, asap);
         }
 
         /// <summary>
@@ -185,11 +185,11 @@ namespace VirtualAgentsFramework
         /// Shortcut queue management function
         /// </summary>
         /// <param name="destinationCoordinates">Position the agent should run to</param>
-        /// <param name="force">true if the task's execution should be forced, false if the task should be scheduled</param>
-        public void RunTo(Vector3 destinationCoordinates, bool force = false)
+        /// <param name="asap">true if the task should be executed as soon as possible, false if the task should be scheduled</param>
+        public void RunTo(Vector3 destinationCoordinates, bool asap = false)
         {
             AgentMovementTask movementTask = new AgentMovementTask(destinationCoordinates, true);
-            ScheduleOrForce(movementTask, force);
+            ScheduleOrForce(movementTask, asap);
         }
 
         /// <summary>
@@ -197,11 +197,11 @@ namespace VirtualAgentsFramework
         /// Shortcut queue management function
         /// </summary>
         /// <param name="animationName">Name of the animation to be played</param>
-        /// <param name="force">true if the task's execution should be forced, false if the task should be scheduled</param>
-        public void PlayAnimation(string animationName, bool force = false)
+        /// <param name="asap">true if the task should be executed as soon as possible, false if the task should be scheduled</param>
+        public void PlayAnimation(string animationName, bool asap = false)
         {
             AgentAnimationTask animationTask = new AgentAnimationTask(animationName);
-            ScheduleOrForce(animationTask, force);
+            ScheduleOrForce(animationTask, asap);
         }
 
         /// <summary>
@@ -209,11 +209,11 @@ namespace VirtualAgentsFramework
         /// Shortcut queue management function
         /// </summary>
         /// <param name="secondsWaiting">Number of seconds the agent should wait</param>
-        /// <param name="force">true if the task's execution should be forced, false if the task should be scheduled</param>
-        public void WaitForSeconds(float secondsWaiting, bool force = false)
+        /// <param name="asap">true if the task should be executed as soon as possible, false if the task should be scheduled</param>
+        public void WaitForSeconds(float secondsWaiting, bool asap = false)
         {
             AgentWaitingTask waitingTask = new AgentWaitingTask(secondsWaiting);
-            ScheduleOrForce(waitingTask, force);
+            ScheduleOrForce(waitingTask, asap);
         }
 
         //TODO
