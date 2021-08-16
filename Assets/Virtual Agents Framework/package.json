@@ -5,7 +5,11 @@
   "description": "A Unity package for creating virtual agents",
   "unity": "2019.4",
   "author": {
-    "name": "Danylo Bekhter\nMixed Reality Team\nInformatik 5, RWTH Aachen University",
+    "name": "Danylo Bekhter\nAdvanced Community Information Systems\nInformatik 5, RWTH Aachen University",
     "email": "danylo.bekhter@rwth-aachen.de"
+  },
+  "author": {
+    "name": "Benedikt Hensen\nAdvanced Community Information Systems\nInformatik 5, RWTH Aachen University",
+    "url": "http://dbis.rwth-aachen.de/cms"
   }
 }
