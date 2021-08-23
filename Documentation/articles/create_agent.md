@@ -24,4 +24,4 @@ This project utilizes Unity's Nav Mesh class from UnityEngine.AIModule as well a
 ## Fixes for known problems
 
 - If you experience your character jumping/crouching/jittering, try setting the Third Person Character component's Ground Check Distance to 0.5 or higher.
-- If your character does not switch to the next task after a movement task, it is likely related to how your destination object is set up. Please refer to the article [How to correctly set up a destination object](./destination_object.md).
+- If your character does not switch to the next task after a movement task, it is likely related to how your destination object is set up. Please refer to the article [How to correctly set up a destination object](~/articles/set_up_destination_object.md).
