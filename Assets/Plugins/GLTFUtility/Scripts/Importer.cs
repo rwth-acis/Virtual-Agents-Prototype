@@ -50,13 +50,13 @@ namespace Siccity.GLTFUtility {
 			return ImportGLB(bytes, importSettings, out animations);
 		}
 
-		public static void LoadFromFileAsync(string filepath, ImportSettings importSettings, Action<GameObject, AnimationClip[]> onFinished, Action<float> onProgress = null) {
+		public static void LoadFromFileAsync(string filepath, ImportSettings importSettings, Action<GameObject> onFinished, Action<float> onProgress = null) {
 			string extension = Path.GetExtension(filepath).ToLower();
 			if (extension == ".glb") ImportGLBAsync(filepath, importSettings, onFinished, onProgress);
 			else if (extension == ".gltf") ImportGLTFAsync(filepath, importSettings, onFinished, onProgress);
 			else {
 				Debug.Log("Extension '" + extension + "' not recognized in " + filepath);
-				onFinished(null, null);
+				onFinished(null);
 			}
 		}
 
@@ -77,14 +77,14 @@ namespace Siccity.GLTFUtility {
 			return gltfObject.LoadInternal(null, bytes, binChunkStart, importSettings, out animations);
 		}
 
-		public static void ImportGLBAsync(string filepath, ImportSettings importSettings, Action<GameObject, AnimationClip[]> onFinished, Action<float> onProgress = null) {
+		public static void ImportGLBAsync(string filepath, ImportSettings importSettings, Action<GameObject> onFinished, Action<float> onProgress = null) {
 			FileStream stream = File.OpenRead(filepath);
 			long binChunkStart;
 			string json = GetGLBJson(stream, out binChunkStart);
 			LoadAsync(json, filepath, null, binChunkStart, importSettings, onFinished, onProgress).RunCoroutine();
 		}
 
-		public static void ImportGLBAsync(byte[] bytes, ImportSettings importSettings, Action<GameObject, AnimationClip[]> onFinished, Action<float> onProgress = null) {
+		public static void ImportGLBAsync(byte[] bytes, ImportSettings importSettings, Action<GameObject> onFinished, Action<float> onProgress = null) {
 			Stream stream = new MemoryStream(bytes);
 			long binChunkStart;
 			string json = GetGLBJson(stream, out binChunkStart);
@@ -141,7 +141,7 @@ namespace Siccity.GLTFUtility {
 			return gltfObject.LoadInternal(filepath, null, 0, importSettings, out animations);
 		}
 
-		public static void ImportGLTFAsync(string filepath, ImportSettings importSettings, Action<GameObject, AnimationClip[]> onFinished, Action<float> onProgress = null) {
+		public static void ImportGLTFAsync(string filepath, ImportSettings importSettings, Action<GameObject> onFinished, Action<float> onProgress = null) {
 			string json = File.ReadAllText(filepath);
 
 			// Parse json
@@ -222,7 +222,7 @@ namespace Siccity.GLTFUtility {
 #endregion
 
 #region Async
-		private static IEnumerator LoadAsync(string json, string filepath, byte[] bytefile, long binChunkStart, ImportSettings importSettings, Action<GameObject, AnimationClip[]> onFinished, Action<float> onProgress = null) {
+		private static IEnumerator LoadAsync(string json, string filepath, byte[] bytefile, long binChunkStart, ImportSettings importSettings, Action<GameObject> onFinished, Action<float> onProgress = null) {
 			// Threaded deserialization
 			Task<GLTFObject> deserializeTask = new Task<GLTFObject>(() => JsonConvert.DeserializeObject<GLTFObject>(json));
 			deserializeTask.Start();
@@ -266,11 +266,7 @@ namespace Siccity.GLTFUtility {
 			while (!importTasks.All(x => x.IsCompleted)) yield return null;
 
 			// Fire onFinished when all tasks have completed
-			GameObject root = nodeTask.Result.GetRoot();
-			GLTFAnimation.ImportResult[] animationResult = gltfObject.animations.Import(accessorTask.Result, nodeTask.Result, importSettings);
-			AnimationClip[] animations = new AnimationClip[0];
-			if (animationResult != null) animations = animationResult.Select(x => x.clip).ToArray();
-			if (onFinished != null) onFinished(nodeTask.Result.GetRoot(), animations);
+			if (onFinished != null) onFinished(nodeTask.Result.GetRoot());
 
 			// Close file streams
 			foreach (var item in bufferTask.Result) {
@@ -298,8 +294,6 @@ namespace Siccity.GLTFUtility {
 				for (int i = 0; i < gLTFObject.extensionsRequired.Count; i++) {
 					switch (gLTFObject.extensionsRequired[i]) {
 						case "KHR_materials_pbrSpecularGlossiness":
-							break;
-						case "KHR_draco_mesh_compression":
 							break;
 						default:
 							Debug.LogWarning($"GLTFUtility: Required extension '{gLTFObject.extensionsRequired[i]}' not supported. Import process will proceed but results may vary.");

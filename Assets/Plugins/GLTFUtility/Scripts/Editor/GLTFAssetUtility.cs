@@ -1,8 +1,12 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using UnityEditor;
-using UnityEditor.Experimental.AssetImporters;
+﻿using UnityEditor;
 using UnityEngine;
+using System.Collections.Generic;
+
+#if UNITY_2020_2_OR_NEWER
+using UnityEditor.AssetImporters;
+#else
+using UnityEditor.Experimental.AssetImporters;
+#endif
 
 namespace Siccity.GLTFUtility {
 	/// <summary> Contains methods for saving a gameobject as an asset </summary>
