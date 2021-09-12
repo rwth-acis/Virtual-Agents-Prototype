@@ -39,6 +39,7 @@ namespace VirtualAgentsFramework
             //agent.WalkTo(printer);
             //agent.TurnHeadTo(button);
             //agent.PressOn(button);
+            agent.PlayAnimation("Pointing");
         }
 
         void Update() {}
