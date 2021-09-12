@@ -36,7 +36,7 @@ namespace VirtualAgentsFramework
             agent.WalkTo(object2);
             agent.WaitForSeconds(2f);
             agent.WalkTo(gameObject);*/
-            agent.WalkTo(printer);
+            //agent.WalkTo(printer);
             //agent.TurnHeadTo(button);
             //agent.PressOn(button);
         }
