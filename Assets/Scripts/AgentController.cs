@@ -8,6 +8,7 @@ namespace VirtualAgentsFramework
     {
         [SerializeField] Agent agent;
         [SerializeField] GameObject object2;
+        [SerializeField] GameObject printer;
 
         void Start()
         {
@@ -35,6 +36,9 @@ namespace VirtualAgentsFramework
             agent.WalkTo(object2);
             agent.WaitForSeconds(2f);
             agent.WalkTo(gameObject);*/
+            agent.WalkTo(printer);
+            //agent.TurnHeadTo(button);
+            //agent.PressOn(button);
         }
 
         void Update() {}
