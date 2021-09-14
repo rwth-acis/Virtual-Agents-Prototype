@@ -30,7 +30,7 @@ public class CharacterAgent : MonoBehaviour
         Vector3 curMove = transform.position - previousPosition;
         curSpeed = curMove.magnitude / Time.deltaTime;
         previousPosition = transform.position;
-        Debug.Log(curSpeed);
+        //Debug.Log(curSpeed);
 
         if (agent.remainingDistance > agent.stoppingDistance)
         {

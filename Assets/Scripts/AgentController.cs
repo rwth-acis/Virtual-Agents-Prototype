@@ -1,6 +1,8 @@
 ﻿using UnityEngine;
 using System.Collections;
 using VirtualAgentsFramework.AgentTasks;
+// Rigs
+using UnityEngine.Animations.Rigging;
 
 namespace VirtualAgentsFramework
 {
@@ -9,6 +11,9 @@ namespace VirtualAgentsFramework
         [SerializeField] Agent agent;
         [SerializeField] GameObject object2;
         [SerializeField] GameObject printer;
+        [SerializeField] GameObject picture;
+        [SerializeField] Rig twistChain;
+        [SerializeField] Rig leftArmStretch;
 
         void Start()
         {
@@ -39,7 +44,9 @@ namespace VirtualAgentsFramework
             //agent.WalkTo(printer);
             //agent.TurnHeadTo(button);
             //agent.PressOn(button);
-            agent.PlayAnimation("Pointing");
+            //agent.PlayAnimation("Pointing"); // schedule a fixed animation; or later for a versatile animation: agent.PointTo(picture, false);
+            agent.WaitForSeconds(1f);
+            agent.PointTo(picture, twistChain, leftArmStretch); // schedule my procedural animation
         }
 
         void Update() {}

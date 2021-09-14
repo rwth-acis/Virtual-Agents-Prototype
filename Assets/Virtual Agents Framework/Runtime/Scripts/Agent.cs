@@ -10,6 +10,8 @@ using System.Collections.Generic;
 using VirtualAgentsFramework.AgentTasks;
 // Action
 using System;
+// Rigs
+using UnityEngine.Animations.Rigging;
 
 namespace VirtualAgentsFramework
 {
@@ -220,6 +222,19 @@ namespace VirtualAgentsFramework
         {
             AgentPressingTask pressingTask = new AgentPressingTask(destinationCoordinates);
             ScheduleOrForce(pressingTask, asap);
+        }
+
+        public void PointTo(GameObject destinationObject, Rig twistChain, Rig leftArmStretch, bool procedural = true, bool asap = false)
+        {
+            /*if(procedural)
+            {*/
+                AgentPointingTask pointingTask = new AgentPointingTask(destinationObject, twistChain, leftArmStretch);
+            /*}
+            else
+            {
+                // Create a simple animation task
+            }*/
+            ScheduleOrForce(pointingTask, asap);
         }
 
         //TODO
@@ -543,6 +558,133 @@ namespace VirtualAgentsFramework
             public void Update()
             {
                 // Is there maybe a simpler solution using a lerp? Or maybe a real-time breaking condition from the animator? I mean, the recursive idea should work but maybe there is a more elegant solution akin the animation task
+            }
+        }
+
+        public class AgentPointingTask : IAgentTask
+        {
+            private Agent agent;
+            private GameObject destinationObject = null;
+            private Rig twistChain;
+            private Rig leftArmStretch;
+            private enum Program
+            {
+                ascending,
+                waiting,
+                descending
+            }
+            private Program program;
+
+            public event Action OnTaskFinished;
+
+            public AgentPointingTask(GameObject destinationObject, Rig twistChain, Rig leftArmStretch)
+            {
+                this.destinationObject = destinationObject;
+                this.twistChain = twistChain;
+                this.leftArmStretch = leftArmStretch;
+            }
+
+            public AgentPointingTask(Vector3 destinationCoordinates, Rig twistChain, Rig leftArmStretch)
+            {
+                CreateDestinationObject(destinationCoordinates);
+                this.twistChain = twistChain;
+                this.leftArmStretch = leftArmStretch;
+            }
+
+            private void CreateDestinationObject(Vector3 destinationCoordinates)
+            {
+                destinationObject = new GameObject();
+                destinationObject.transform.position = destinationCoordinates;
+            }
+
+            public void Execute(Agent agent)
+            {
+                this.agent = agent;
+                //TODO destroy destination object upon execution (if one was created)
+            }
+
+            public void Update()
+            {
+                switch(program)
+                {
+                    case Program.ascending:
+                        agent.StartCoroutine(IncreaseRigWeightCoroutine(twistChain, 1f, program)); // Coroutine parallel
+                        agent.StartCoroutine(IncreaseRigWeightCoroutine(leftArmStretch, 1f, Program.waiting));
+                        Debug.Log("Ascending");
+                        break;
+                    case Program.waiting:
+                        agent.StartCoroutine(WaitingCoroutine(1f, Program.descending));
+                        Debug.Log("Waiting");
+                        break;
+                    case Program.descending:
+                        DecreaseRigWeight(twistChain, 0f); // Procedural parallel
+                        DecreaseRigWeight(leftArmStretch, 0f);
+                        Debug.Log("Descending");
+                        break;
+                }
+            }
+
+            void IncreaseRigWeight(Rig rig, float targetWeight, Program nextProgram, float speed = 100f)
+            {
+                if(rig.weight < targetWeight)
+                {
+                    rig.weight += 1f / speed;
+                }
+                if(rig.weight == targetWeight)
+                {
+                    program = nextProgram;
+                }
+            }
+
+            void DecreaseRigWeight(Rig rig, float targetWeight, bool last = false, float speed = 100f)
+            {
+                if(rig.weight > targetWeight)
+                {
+                    rig.weight -= 1f / speed;
+                }
+                if(rig.weight == targetWeight && last == true)
+                {
+                    // Trigger the TaskFinished event
+                    OnTaskFinished();
+                }
+            }
+
+            private IEnumerator IncreaseRigWeightCoroutine(Rig rig, float targetWeight, Program nextProgram, float speed = 100f)
+            {
+                if(rig.weight < targetWeight)
+                {
+                    rig.weight += 1f / speed;
+                }
+                yield return new WaitUntil(() => rig.weight == targetWeight); // rig.weight >= targetWeight - 1f / speed
+                if(rig.weight == targetWeight)
+                {
+                    program = nextProgram;
+                }
+            }
+
+            private IEnumerator DecreaseRigWeightCoroutine(Rig rig, float targetWeight, bool last = false, float speed = 100f)
+            {
+                if(rig.weight > targetWeight)
+                {
+                    rig.weight -= 1f / speed;
+                }
+                yield return new WaitUntil(() => rig.weight == targetWeight); //(targetWeight - rig.weight >= 1f / speed) || (targetWeight - rig.weight <= 1f / speed)
+                if(rig.weight == targetWeight && last == true)
+                {
+                    // Trigger the TaskFinished event
+                    OnTaskFinished();
+                }
+            }
+
+            private IEnumerator WaitingCoroutine(float waitingTime, Program nextProgram, bool last = false)
+            {
+                yield return new WaitForSeconds(waitingTime);
+                program = nextProgram; // "this" löschen
+                if(last == true) // "== true" löschen
+                {
+                    // Trigger the TaskFinished event
+                    OnTaskFinished();
+                }
             }
         }
 
