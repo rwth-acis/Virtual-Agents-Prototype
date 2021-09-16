@@ -44,9 +44,10 @@ namespace VirtualAgentsFramework
             //agent.WalkTo(printer);
             //agent.TurnHeadTo(button);
             //agent.PressOn(button);
-            //agent.PlayAnimation("Pointing"); // schedule a fixed animation; or later for a versatile animation: agent.PointTo(picture, false);
             agent.WaitForSeconds(1f);
             agent.PointTo(picture, twistChain, leftArmStretch); // schedule my procedural animation
+            agent.WaitForSeconds(1f);
+            agent.PlayAnimation("Pointing"); // schedule a modified Mixamo animation
         }
 
         void Update() {}

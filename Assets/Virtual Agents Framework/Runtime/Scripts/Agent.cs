@@ -618,7 +618,7 @@ namespace VirtualAgentsFramework
                         break;
                     case Program.descending:
                         DecreaseRigWeight(twistChain, 0f); // Procedural parallel
-                        DecreaseRigWeight(leftArmStretch, 0f);
+                        DecreaseRigWeight(leftArmStretch, 0f, true);
                         Debug.Log("Descending");
                         break;
                 }
