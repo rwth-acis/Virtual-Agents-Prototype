@@ -15,6 +15,9 @@ namespace VirtualAgentsFramework
         [SerializeField] Rig twistChain;
         [SerializeField] Rig leftArmStretch;
 
+        [SerializeField] GameObject table;
+        [SerializeField] GameObject mouse;
+
         void Start()
         {
             // ***Queue management***
@@ -46,10 +49,16 @@ namespace VirtualAgentsFramework
             //agent.PressOn(button);
 
             // Walking and pointing sequence
-            agent.WalkTo(new Vector3(-1.5f, 0, -3.2f));
+            /*agent.WalkTo(new Vector3(-1.5f, 0, -3.2f));
             agent.PointTo(picture, twistChain, leftArmStretch); // schedule my procedural animation
             agent.WaitForSeconds(1f);
-            agent.PlayAnimation("Pointing"); // schedule a modified Mixamo animation
+            agent.PlayAnimation("Pointing"); // schedule a modified Mixamo animation */
+
+            // Walking and picking up sequence
+            agent.WalkTo(table);
+            //agent.PickUp(mouse); // My procedural animation
+            //agent.WaitForSeconds(1f);
+            agent.PlayAnimation("PickingUp");
         }
 
         void Update() {}
