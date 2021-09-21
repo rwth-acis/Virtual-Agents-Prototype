@@ -59,14 +59,6 @@ namespace VirtualAgentsFramework
             //agent.PickUp(mouse); // My procedural animation
             //agent.WaitForSeconds(1f);
             agent.PlayAnimation("PickingUp");
-            agent.WaitForSeconds(2f);
-            agent.PlayAnimation("PickingUp");
-            agent.WaitForSeconds(2f);
-            agent.PlayAnimation("PickingUp");
-            agent.WaitForSeconds(2f);
-            agent.PlayAnimation("PickingUp");
-            agent.WaitForSeconds(2f);
-            agent.PlayAnimation("PickingUp");
         }
 
         void Update() {}
