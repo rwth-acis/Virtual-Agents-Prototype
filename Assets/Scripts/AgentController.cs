@@ -54,6 +54,8 @@ namespace VirtualAgentsFramework
             agent.PointTo(picture, twistChain, leftArmStretch, leftArmStretchTarget); // schedule my procedural animation
             agent.WaitForSeconds(1f);
             agent.PlayAnimation("Pointing"); // schedule a modified Mixamo animation
+            agent.PointTo(table, twistChain, leftArmStretch, leftArmStretchTarget);
+            agent.PlayAnimation("Pointing");
 
             // Walking and picking up sequence
             //agent.WalkTo(table);
