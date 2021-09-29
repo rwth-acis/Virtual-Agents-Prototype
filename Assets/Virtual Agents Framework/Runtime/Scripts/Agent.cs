@@ -224,11 +224,11 @@ namespace VirtualAgentsFramework
             ScheduleOrForce(pressingTask, asap);
         }
 
-        public void PointTo(GameObject destinationObject, Rig twistChain, Rig leftArmStretch, bool procedural = true, bool asap = false)
+        public void PointTo(GameObject destinationObject, Rig twistChain, Rig leftArmStretch, GameObject target, bool procedural = true, bool asap = false)
         {
             /*if(procedural)
             {*/
-                AgentPointingTask pointingTask = new AgentPointingTask(destinationObject, twistChain, leftArmStretch);
+                AgentPointingTask pointingTask = new AgentPointingTask(destinationObject, twistChain, leftArmStretch, target);
             /*}
             else
             {
@@ -565,6 +565,7 @@ namespace VirtualAgentsFramework
         {
             private Agent agent;
             private GameObject destinationObject = null;
+            private GameObject target = null;
             private Rig twistChain;
             private Rig leftArmStretch;
             private enum Program
@@ -577,18 +578,20 @@ namespace VirtualAgentsFramework
 
             public event Action OnTaskFinished;
 
-            public AgentPointingTask(GameObject destinationObject, Rig twistChain, Rig leftArmStretch)
+            public AgentPointingTask(GameObject destinationObject, Rig twistChain, Rig leftArmStretch, GameObject target)
             {
                 this.destinationObject = destinationObject;
                 this.twistChain = twistChain;
                 this.leftArmStretch = leftArmStretch;
+                this.target = target;
             }
 
-            public AgentPointingTask(Vector3 destinationCoordinates, Rig twistChain, Rig leftArmStretch)
+            public AgentPointingTask(Vector3 destinationCoordinates, Rig twistChain, Rig leftArmStretch, GameObject target)
             {
                 CreateDestinationObject(destinationCoordinates);
                 this.twistChain = twistChain;
                 this.leftArmStretch = leftArmStretch;
+                this.target = target;
             }
 
             private void CreateDestinationObject(Vector3 destinationCoordinates)
@@ -600,6 +603,7 @@ namespace VirtualAgentsFramework
             public void Execute(Agent agent)
             {
                 this.agent = agent;
+                target.transform.position = destinationObject.transform.position;
                 //TODO destroy destination object upon execution (if one was created)
             }
 
