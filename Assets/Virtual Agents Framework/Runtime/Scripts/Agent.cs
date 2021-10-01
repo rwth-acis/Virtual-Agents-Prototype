@@ -612,8 +612,8 @@ namespace VirtualAgentsFramework
                 switch(program)
                 {
                     case Program.ascending:
-                        agent.StartCoroutine(IncreaseRigWeightCoroutine(twistChain, 1f, program)); // Coroutine parallel
-                        agent.StartCoroutine(IncreaseRigWeightCoroutine(leftArmStretch, 1f, Program.waiting));
+                        agent.StartCoroutine(IncreaseRigWeightCoroutine(twistChain, 0.5f, program)); // Coroutine parallel
+                        agent.StartCoroutine(IncreaseRigWeightCoroutine(leftArmStretch, 0.5f, Program.waiting));
                         Debug.Log("Ascending");
                         break;
                     case Program.waiting:
@@ -659,8 +659,8 @@ namespace VirtualAgentsFramework
                 {
                     rig.weight += 1f / speed;
                 }
-                yield return new WaitUntil(() => rig.weight == targetWeight); // rig.weight >= targetWeight - 1f / speed
-                if(rig.weight == targetWeight)
+                yield return new WaitUntil(() => rig.weight >= targetWeight - 1f / speed); // rig.weight >= targetWeight - 1f / speed
+                if(rig.weight >= targetWeight - 1f / speed)
                 {
                     program = nextProgram;
                 }

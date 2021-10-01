@@ -12,7 +12,7 @@ namespace VirtualAgentsFramework
         [SerializeField] GameObject object2;
         [SerializeField] GameObject printer;
         [SerializeField] GameObject picture;
-        [SerializeField] Rig twistChain;
+        [SerializeField] Rig twist;
         [SerializeField] Rig leftArmStretch;
         [SerializeField] GameObject leftArmStretchTarget;
 
@@ -51,10 +51,10 @@ namespace VirtualAgentsFramework
 
             // Walking and pointing sequence
             agent.WalkTo(new Vector3(-1.5f, 0, -3.2f));
-            agent.PointTo(picture, twistChain, leftArmStretch, leftArmStretchTarget); // schedule my procedural animation
+            agent.PointTo(picture, twist, leftArmStretch, leftArmStretchTarget); // schedule my procedural animation
             agent.WaitForSeconds(1f);
             agent.PlayAnimation("Pointing"); // schedule a modified Mixamo animation
-            agent.PointTo(table, twistChain, leftArmStretch, leftArmStretchTarget);
+            agent.PointTo(table, twist, leftArmStretch, leftArmStretchTarget);
             agent.PlayAnimation("Pointing");
 
             // Walking and picking up sequence
