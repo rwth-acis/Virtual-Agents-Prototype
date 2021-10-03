@@ -714,6 +714,9 @@ namespace VirtualAgentsFramework
             Quaternion lookRotation;
             float turnAmount;
 
+            private const float frameTimer = 100; //TODO make this obsolete using subtasks
+            private float frameCount = 0;
+
             public event Action OnTaskFinished;
 
             public AgentRotationTask(Vector3 rotation)
@@ -757,8 +760,14 @@ namespace VirtualAgentsFramework
                 {
                     animator.SetFloat("Turn", 0f, 0.1f, Time.deltaTime);
                     // Trigger the TaskFinished event
-                    if(animator.GetFloat("Turn") == 0f)
+                    if(frameCount == frameTimer) //TODO replace this with a waiting subtask for the same amount of time as the Animator's dampTime
+                    {
                         OnTaskFinished();
+                    }
+                    else
+                    {
+                        frameCount++;
+                    }
                 }
             }
         }
