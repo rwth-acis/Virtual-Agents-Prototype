@@ -243,6 +243,12 @@ namespace VirtualAgentsFramework
 
         }
 
+        public void RotateTowards(Vector3 rotation, bool asap = false)
+        {
+            AgentRotationTask rotationTask = new AgentRotationTask(rotation);
+            ScheduleOrForce(rotationTask, asap);
+        }
+
         /// <summary>
         /// Helper function for shortcut queue management functions.
         /// Schedule a task or force its execution depending on the flag
@@ -689,6 +695,38 @@ namespace VirtualAgentsFramework
                     // Trigger the TaskFinished event
                     OnTaskFinished();
                 }
+            }
+        }
+
+        public class AgentRotationTask : IAgentTask
+        {
+            private Agent agent;
+            private NavMeshAgent navMeshAgent;
+            private ThirdPersonCharacter thirdPersonCharacter;
+            private Vector3 rotation;
+
+            public event Action OnTaskFinished;
+
+            public AgentRotationTask(Vector3 rotation)
+            {
+                this.rotation = rotation;
+            }
+
+            public void Execute(Agent agent)
+            {
+                this.agent = agent;
+                navMeshAgent = agent.GetComponent<NavMeshAgent>();
+                thirdPersonCharacter = agent.GetComponent<ThirdPersonCharacter>();
+            }
+
+            public void Update()
+            {
+                var targetPosition = rotation;
+                var targetPoint = new Vector3(targetPosition.x, agent.transform.position.y, targetPosition.z);
+                var direction = (targetPoint - agent.transform.position).normalized;
+                var lookRotation = Quaternion.LookRotation(direction);
+
+                agent.transform.rotation = Quaternion.RotateTowards(agent.transform.rotation, lookRotation, 1);
             }
         }
 
