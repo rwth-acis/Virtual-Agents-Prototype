@@ -703,7 +703,16 @@ namespace VirtualAgentsFramework
             private Agent agent;
             private NavMeshAgent navMeshAgent;
             private ThirdPersonCharacter thirdPersonCharacter;
+            private Animator animator;
             private Vector3 rotation;
+
+            private float curSpeed;
+            private Vector3 previousRotation;
+            private const float damping = 6;
+
+            Vector3 targetPosition, targetPoint, direction;
+            Quaternion lookRotation;
+            float turnAmount;
 
             public event Action OnTaskFinished;
 
@@ -717,16 +726,40 @@ namespace VirtualAgentsFramework
                 this.agent = agent;
                 navMeshAgent = agent.GetComponent<NavMeshAgent>();
                 thirdPersonCharacter = agent.GetComponent<ThirdPersonCharacter>();
+                animator = agent.GetComponent<Animator>();
             }
 
             public void Update()
             {
-                var targetPosition = rotation;
-                var targetPoint = new Vector3(targetPosition.x, agent.transform.position.y, targetPosition.z);
-                var direction = (targetPoint - agent.transform.position).normalized;
-                var lookRotation = Quaternion.LookRotation(direction);
+                // Calculate actual speed
+                Vector3 curRotation = agent.transform.rotation.eulerAngles - previousRotation;
+                curSpeed = curRotation.magnitude / Time.deltaTime;
+                previousRotation = agent.transform.rotation.eulerAngles;
 
-                agent.transform.rotation = Quaternion.RotateTowards(agent.transform.rotation, lookRotation, 1);
+                if(curSpeed > 0f)
+                {
+                    targetPosition = rotation;
+                    targetPoint = new Vector3(targetPosition.x, agent.transform.position.y, targetPosition.z);
+                    direction = (targetPoint - agent.transform.position).normalized;
+                    lookRotation = Quaternion.LookRotation(direction);
+
+                    turnAmount = Mathf.Atan2(targetPoint.x, targetPoint.z);
+                    agent.transform.rotation = Quaternion.RotateTowards(agent.transform.rotation, lookRotation, 1);
+                    animator.SetFloat("Turn", -turnAmount * curSpeed / damping, 0.1f, Time.deltaTime);
+                    /*navMeshAgent.SetDestination(targetPoint);
+                    if (navMeshAgent.remainingDistance > navMeshAgent.stoppingDistance)
+                    {
+                        thirdPersonCharacter.Move(navMeshAgent.desiredVelocity, false, false);
+                    }*/
+                    Debug.Log(curSpeed);
+                }
+                else
+                {
+                    animator.SetFloat("Turn", 0f, 0.1f, Time.deltaTime);
+                    // Trigger the TaskFinished event
+                    if(animator.GetFloat("Turn") == 0f)
+                        OnTaskFinished();
+                }
             }
         }
 
