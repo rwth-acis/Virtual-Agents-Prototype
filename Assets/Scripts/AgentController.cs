@@ -51,12 +51,17 @@ namespace VirtualAgentsFramework
 
             // Walking and pointing sequence
             agent.WalkTo(new Vector3(-1.5f, 0, -3.2f));
-            agent.RotateTowards(new Vector3(1.2f, 0, -3.2f));
-            //agent.WalkTo(new Vector3(-2f, 0, -3.2f));
+
+            agent.RotateTowards(new Vector3(-0.9f, 0, -4.6f));
             agent.PointTo(picture, twist, leftArmStretch, leftArmStretchTarget); // schedule my procedural animation
             agent.WaitForSeconds(1f);
             agent.PlayAnimation("Pointing"); // schedule a modified Mixamo animation
+            
+            agent.WaitForSeconds(1f);
+
+            agent.RotateTowards(new Vector3(-3.4f, 0, -5.2f));
             agent.PointTo(table, twist, leftArmStretch, leftArmStretchTarget);
+            agent.WaitForSeconds(1f);
             agent.PlayAnimation("Pointing");
 
             // Walking and picking up sequence

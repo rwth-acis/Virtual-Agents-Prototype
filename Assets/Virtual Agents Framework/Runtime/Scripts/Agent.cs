@@ -708,7 +708,7 @@ namespace VirtualAgentsFramework
 
             private float curSpeed;
             private Vector3 previousRotation;
-            private const float damping = 6;
+            private const float damping = 20;
 
             Vector3 targetPosition, targetPoint, direction;
             Quaternion lookRotation;
