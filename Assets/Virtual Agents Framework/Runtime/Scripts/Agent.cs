@@ -619,7 +619,7 @@ namespace VirtualAgentsFramework
                 {
                     case Program.ascending:
                         agent.StartCoroutine(IncreaseRigWeightCoroutine(twistChain, 0.5f, program)); // Coroutine parallel
-                        agent.StartCoroutine(IncreaseRigWeightCoroutine(leftArmStretch, 0.5f, Program.waiting));
+                        agent.StartCoroutine(IncreaseRigWeightCoroutine(leftArmStretch, 1f, Program.waiting));
                         Debug.Log("Ascending");
                         break;
                     case Program.waiting:
