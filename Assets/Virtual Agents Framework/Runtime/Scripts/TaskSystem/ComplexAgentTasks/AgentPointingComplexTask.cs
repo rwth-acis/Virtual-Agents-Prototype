@@ -76,9 +76,7 @@ namespace VirtualAgentsFramework
                 this.targetWeight = targetWeight;
             }
 
-            public void Execute(Agent agent)
-            {
-            }
+            public void Execute(Agent agent) {}
 
             public void Update()
             {
