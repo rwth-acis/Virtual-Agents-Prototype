@@ -31,6 +31,8 @@ namespace VirtualAgentsFramework
             public State currentState {get; set;}
             public IAgentTask currentSubTask {get; set;}
 
+            bool finishFlag = false;
+
             public void RequestNextSubTask()
             {
                 IAgentTask nextSubTask = subTaskQueue.RequestNextTask();
@@ -38,6 +40,7 @@ namespace VirtualAgentsFramework
                 {
                     // The queue is empty, thus change the agent's current state to idle
                     currentState = State.idle;
+                    if (finishFlag) { OnTaskFinished(); }
                 }
                 else
                 {
@@ -96,6 +99,7 @@ namespace VirtualAgentsFramework
                 subTaskQueue.AddTask(new AgentWaitingTask(1f));
                 subTaskQueue.AddTask(new ChangeRigWeightSubTask(twistChain, 0f));
                 subTaskQueue.AddTask(new ChangeRigWeightSubTask(leftArmStretch, 0f));
+                FinishTask();
             }
 
             public void Update()
@@ -111,6 +115,11 @@ namespace VirtualAgentsFramework
                         currentSubTask.Update(); // perform frame-to-frame updates required by the current task
                         break;
                 }
+            }
+
+            private void FinishTask()
+            {
+                finishFlag = true;
             }
         }
 
