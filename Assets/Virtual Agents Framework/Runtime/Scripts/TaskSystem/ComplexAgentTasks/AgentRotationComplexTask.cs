@@ -51,8 +51,8 @@ namespace VirtualAgentsFramework
             public void Execute(Agent agent)
             {
                 this.agent = agent;
-                subTaskQueue = new AgentTaskManager();
 
+                subTaskQueue = new AgentTaskManager(); // IMPORTANT for complex tasks
                 currentState = State.idle;
 
                 subTaskQueue.AddTask(new AgentRotationSubTask(rotation));
