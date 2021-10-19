@@ -80,7 +80,7 @@ namespace VirtualAgentsFramework
                 }
                 else
                 {
-                    animator.SetFloat("Turn", 0f, 0.1f, Time.deltaTime);
+                    /*animator.SetFloat("Turn", 0f, 0.1f, Time.deltaTime);
                     // Trigger the TaskFinished event
                     if(frameCount == frameTimer) //TODO replace this with a waiting subtask for the same amount of time as the Animator's dampTime
                     {
@@ -89,8 +89,23 @@ namespace VirtualAgentsFramework
                     else
                     {
                         frameCount++;
-                    }
+                    }*/
+                    agent.StartCoroutine(FinishAnimation());
                 }
+            }
+
+            private IEnumerator FinishAnimation()
+            {
+                animator.SetFloat("Turn", 0f, 0.1f, Time.deltaTime);
+                // Wait for the current animation to finish
+                Debug.Log(animator.IsInTransition(0));
+                Debug.Log(animator.GetCurrentAnimatorStateInfo(0));
+                while (!animator.GetCurrentAnimatorStateInfo(0).IsName("Base.Grounded"))
+                {
+                    yield return null;
+                }
+                Debug.Log("task finished");
+                OnTaskFinished();
             }
         }
     }
