@@ -228,7 +228,8 @@ namespace VirtualAgentsFramework
         {
             /*if(procedural)
             {*/
-                AgentPointingTask pointingTask = new AgentPointingTask(destinationObject, twistChain, leftArmStretch, target);
+                //AgentPointingTask pointingTask = new AgentPointingTask(destinationObject, twistChain, leftArmStretch, target);
+                AgentPointingComplexTask pointingTask = new AgentPointingComplexTask(destinationObject, twistChain, leftArmStretch, target);
             /*}
             else
             {
