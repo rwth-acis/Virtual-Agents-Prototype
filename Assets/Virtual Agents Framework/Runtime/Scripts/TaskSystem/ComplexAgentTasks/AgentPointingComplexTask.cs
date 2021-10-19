@@ -61,14 +61,12 @@ namespace VirtualAgentsFramework
             }
         }
 
-        public class ChangeRigWeightSubTask : IAgentTask
+        public class ChangeRigWeightSubTask : AgentLazyTask
         {
             private Rig rig;
             private float targetWeight;
             private const float speed = 100f;
             private const float precisionFactor = 1f;
-
-            public event Action OnTaskFinished;
 
             public ChangeRigWeightSubTask(Rig rig, float targetWeight)
             {
@@ -76,9 +74,7 @@ namespace VirtualAgentsFramework
                 this.targetWeight = targetWeight;
             }
 
-            public void Execute(Agent agent) {}
-
-            public void Update()
+            public override void Update()
             {
                 if(rig.weight > targetWeight)
                 {
@@ -91,7 +87,7 @@ namespace VirtualAgentsFramework
                 if((rig.weight >= targetWeight - precisionFactor / speed) && (rig.weight <= targetWeight + precisionFactor / speed))
                 {
                     // Trigger the TaskFinished event
-                    OnTaskFinished();
+                    FinishTask();
                 }
             }
         }
