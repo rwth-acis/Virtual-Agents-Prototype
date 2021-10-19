@@ -116,8 +116,6 @@ namespace VirtualAgentsFramework
 
         public class ChangeRigWeightSubTask : IAgentTask
         {
-            private Agent agent;
-
             private Rig rig;
             private float targetWeight;
             private const float speed = 100f;
@@ -133,7 +131,6 @@ namespace VirtualAgentsFramework
 
             public void Execute(Agent agent)
             {
-                this.agent = agent;
             }
 
             public void Update()
@@ -149,7 +146,6 @@ namespace VirtualAgentsFramework
                 if((rig.weight >= targetWeight - precisionFactor / speed) && (rig.weight <= targetWeight + precisionFactor / speed))
                 {
                     // Trigger the TaskFinished event
-                    Debug.Log("Subtask finished");
                     OnTaskFinished();
                 }
             }
