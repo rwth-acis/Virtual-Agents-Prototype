@@ -34,31 +34,79 @@ namespace VirtualAgentsFramework
         /// An internal AgentTask subtask-queue in addition to
         /// the universal AgentTask methods and attributes
         /// </summary>
-        public interface IAgentComplexTask : IAgentTask
+        public abstract class AgentComplexTask : IAgentTask
         {
+            protected Agent agent;
+
+            public event Action OnTaskFinished;
+
             // Any AgentTask can be scheduled as a subtask, including complex AgentTasks
-            AgentTaskManager subTaskQueue
-            {
-                get;
-                set;
-            }
+            protected AgentTaskManager subTaskQueue;
 
             // Current subtask execution state
-            State currentState
+            protected State currentState;
+
+            protected IAgentTask currentSubTask;
+
+            protected bool finishFlag = false;
+
+            protected void RequestNextSubTask() //TODO create a default implementation
             {
-                get;
-                set;
+                IAgentTask nextSubTask = subTaskQueue.RequestNextTask();
+                if(nextSubTask == null)
+                {
+                    // The queue is empty, thus change the agent's current state to idle
+                    currentState = State.idle;
+                    if (finishFlag) { OnTaskFinished(); }
+                }
+                else
+                {
+                    // The queue is not empty, thus...
+                    // change the agent's current state to busy,
+                    currentState = State.busy;
+                    // execute the next task,
+                    nextSubTask.Execute(agent);
+                    // save the current task,
+                    currentSubTask = nextSubTask;
+                    // subscribe to the task's OnTaskFinished event to set the agent's state to idle after task execution
+                    currentSubTask.OnTaskFinished += OnSubTaskFinished;
+                }
             }
 
-            IAgentTask currentSubTask
+            protected void OnSubTaskFinished()
             {
-                get;
-                set;
+                currentState = State.idle;
+                // Unsubscribe from the event
+                currentSubTask.OnTaskFinished -= OnSubTaskFinished;
             }
 
-            void RequestNextSubTask(); //TODO create a default implementation
+            protected void FinishTask()
+            {
+                finishFlag = true;
+            }
 
-            void OnSubTaskFinished(); //TODO create a default implementation
+            public virtual void Execute(Agent agent)
+            {
+                this.agent = agent;
+
+                subTaskQueue = new AgentTaskManager(); // IMPORTANT for complex tasks
+                currentState = State.idle;
+            }
+
+            public virtual void Update()
+            {
+                switch(currentState)
+                {
+                    case State.inactive: // do nothing
+                        break;
+                    case State.idle:
+                        RequestNextSubTask(); // request new tasks
+                        break;
+                    case State.busy:
+                        currentSubTask.Update(); // perform frame-to-frame updates required by the current task
+                        break;
+                }
+            }
         }
 
         public enum State

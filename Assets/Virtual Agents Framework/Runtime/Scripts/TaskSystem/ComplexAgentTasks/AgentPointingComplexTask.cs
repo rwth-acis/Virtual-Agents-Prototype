@@ -17,51 +17,12 @@ namespace VirtualAgentsFramework
 {
     namespace AgentTasks
     {
-        public class AgentPointingComplexTask : IAgentComplexTask
+        public class AgentPointingComplexTask : AgentComplexTask
         {
-            private Agent agent;
             private GameObject destinationObject = null;
             private GameObject target = null;
             private Rig twistChain;
             private Rig leftArmStretch;
-
-            public event Action OnTaskFinished;
-
-            public AgentTaskManager subTaskQueue {get; set;}
-            public State currentState {get; set;}
-            public IAgentTask currentSubTask {get; set;}
-
-            bool finishFlag = false;
-
-            public void RequestNextSubTask()
-            {
-                IAgentTask nextSubTask = subTaskQueue.RequestNextTask();
-                if(nextSubTask == null)
-                {
-                    // The queue is empty, thus change the agent's current state to idle
-                    currentState = State.idle;
-                    if (finishFlag) { OnTaskFinished(); }
-                }
-                else
-                {
-                    // The queue is not empty, thus...
-                    // change the agent's current state to busy,
-                    currentState = State.busy;
-                    // execute the next task,
-                    nextSubTask.Execute(agent);
-                    // save the current task,
-                    currentSubTask = nextSubTask;
-                    // subscribe to the task's OnTaskFinished event to set the agent's state to idle after task execution
-                    currentSubTask.OnTaskFinished += OnSubTaskFinished;
-                }
-            }
-
-            public void OnSubTaskFinished()
-            {
-                currentState = State.idle;
-                // Unsubscribe from the event
-                currentSubTask.OnTaskFinished -= OnSubTaskFinished;
-            }
 
             public AgentPointingComplexTask(GameObject destinationObject, Rig twistChain, Rig leftArmStretch, GameObject target)
             {
@@ -85,12 +46,9 @@ namespace VirtualAgentsFramework
                 destinationObject.transform.position = destinationCoordinates;
             }
 
-            public void Execute(Agent agent)
+            public override void Execute(Agent agent)
             {
-                this.agent = agent;
-
-                subTaskQueue = new AgentTaskManager(); // IMPORTANT for complex tasks
-                currentState = State.idle;
+                base.Execute(agent);
 
                 target.transform.position = destinationObject.transform.position;
                 //TODO destroy destination object upon execution (if one was created)
@@ -100,26 +58,6 @@ namespace VirtualAgentsFramework
                 subTaskQueue.AddTask(new ChangeRigWeightSubTask(twistChain, 0f));
                 subTaskQueue.AddTask(new ChangeRigWeightSubTask(leftArmStretch, 0f));
                 FinishTask();
-            }
-
-            public void Update()
-            {
-                switch(currentState)
-                {
-                    case State.inactive: // do nothing
-                        break;
-                    case State.idle:
-                        RequestNextSubTask(); // request new tasks
-                        break;
-                    case State.busy:
-                        currentSubTask.Update(); // perform frame-to-frame updates required by the current task
-                        break;
-                }
-            }
-
-            private void FinishTask()
-            {
-                finishFlag = true;
             }
         }
 
