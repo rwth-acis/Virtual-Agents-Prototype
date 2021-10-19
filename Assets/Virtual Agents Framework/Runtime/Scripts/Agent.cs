@@ -218,12 +218,23 @@ namespace VirtualAgentsFramework
             ScheduleOrForce(waitingTask, asap);
         }
 
+        //TODO
         public void PressOn(Vector3 destinationCoordinates, bool asap = false)
         {
-            AgentPressingTask pressingTask = new AgentPressingTask(destinationCoordinates);
-            ScheduleOrForce(pressingTask, asap);
+            //AgentPressingTask pressingTask = new AgentPressingTask(destinationCoordinates);
+            //ScheduleOrForce(pressingTask, asap);
         }
 
+        /// <summary>
+        /// Creates an AgentPointingComplexTask and schedules it or forces its execution.
+        /// Shortcut queue management function
+        /// </summary>
+        /// <param name="destinationObject">Object to be pointed to</param>
+        /// <param name="twistChain">Rig controlling head and body twist</param>
+        /// <param name="leftArmStretch">Rig controlling arm stretching</param>
+        /// <param name="target">Helper target object for the rigs</param>
+        /// <param name="procedural">true if the animation should be computed, false if the animation should be played</param>
+        /// <param name="asap">true if the task should be executed as soon as possible, false if the task should be scheduled</param>
         public void PointTo(GameObject destinationObject, Rig twistChain, Rig leftArmStretch, GameObject target, bool procedural = true, bool asap = false)
         {
             /*if(procedural)
@@ -239,11 +250,14 @@ namespace VirtualAgentsFramework
         }
 
         //TODO
-        public void PickUp()
-        {
+        public void PickUp() {}
 
-        }
-
+        /// <summary>
+        /// Creates an AgentRotationTask and schedules it or forces its execution.
+        /// Shortcut queue management function
+        /// </summary>
+        /// <param name="rotation">Position, towards which an agent should rotate</param>
+        /// <param name="asap">true if the task should be executed as soon as possible, false if the task should be scheduled</param>
         public void RotateTowards(Vector3 rotation, bool asap = false)
         {
             AgentRotationTask rotationTask = new AgentRotationTask(rotation);
