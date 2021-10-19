@@ -76,11 +76,11 @@ namespace VirtualAgentsFramework
                     {
                         thirdPersonCharacter.Move(navMeshAgent.desiredVelocity, false, false);
                     }*/
-                    Debug.Log(curSpeed);
+                    //Debug.Log(curSpeed);
                 }
                 else
                 {
-                    /*animator.SetFloat("Turn", 0f, 0.1f, Time.deltaTime);
+                    animator.SetFloat("Turn", 0f, 0.1f, Time.deltaTime);
                     // Trigger the TaskFinished event
                     if(frameCount == frameTimer) //TODO replace this with a waiting subtask for the same amount of time as the Animator's dampTime
                     {
@@ -89,8 +89,8 @@ namespace VirtualAgentsFramework
                     else
                     {
                         frameCount++;
-                    }*/
-                    agent.StartCoroutine(FinishAnimation());
+                    }
+                    //agent.StartCoroutine(FinishAnimation());
                 }
             }
 
