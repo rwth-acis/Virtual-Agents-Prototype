@@ -9,15 +9,16 @@ namespace VirtualAgentsFramework
     public class OfficeAgentController : MonoBehaviour
     {
         [SerializeField] Agent agent;
-        [SerializeField] GameObject object2;
+        [SerializeField] GameObject EntranceDestinationObject;
+        Vector3 ExitDestinationPosition = new Vector3(-2.265f, -0.833f, -12.492f);
         [SerializeField] GameObject printer;
         [SerializeField] GameObject picture;
-        [SerializeField] Rig twist;
-        [SerializeField] Rig leftArmStretch;
-        [SerializeField] GameObject leftArmStretchTarget;
-
         [SerializeField] GameObject table;
         [SerializeField] GameObject mouse;
+
+        [SerializeField] Rig twist;
+        [SerializeField] Rig leftArmStretch;
+        [SerializeField] GameObject rigTarget;
 
         void Start()
         {
@@ -32,14 +33,14 @@ namespace VirtualAgentsFramework
             agent.WalkTo(new Vector3(-1.5f, 0, -3.2f));
 
             agent.RotateTowards(new Vector3(-0.9f, 0, -4.6f));
-            agent.PointTo(picture, twist, leftArmStretch, leftArmStretchTarget); // schedule my procedural animation
+            agent.PointTo(picture, twist, leftArmStretch, rigTarget); // schedule my procedural animation
             agent.WaitForSeconds(1f);
             agent.PlayAnimation("Pointing"); // schedule a modified Mixamo animation
 
             agent.WaitForSeconds(1f);
 
             agent.RotateTowards(new Vector3(-3.4f, 0, -5.2f));
-            agent.PointTo(table, twist, leftArmStretch, leftArmStretchTarget);
+            agent.PointTo(table, twist, leftArmStretch, rigTarget);
             agent.WaitForSeconds(1f);
             agent.PlayAnimation("Pointing");
 
