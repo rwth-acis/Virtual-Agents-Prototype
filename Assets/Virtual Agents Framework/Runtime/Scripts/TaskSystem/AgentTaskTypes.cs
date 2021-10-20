@@ -30,6 +30,10 @@ namespace VirtualAgentsFramework
             event Action OnTaskFinished;
         }
 
+        /// <summary>
+        /// Makes it possible to avoid implementing Update()
+        /// and Execute() functions when they are not needed
+        /// </summary>
         public abstract class AgentLazyTask : IAgentTask
         {
             // Get the agent's data, prepare for and start task execution
@@ -39,7 +43,8 @@ namespace VirtualAgentsFramework
             // Fire when the task is finished to let the agent know
             public event Action OnTaskFinished;
 
-            protected virtual void FinishTask() // The event itself cannot be called in derived classes (https://stackoverflow.com/a/31661451)
+            protected virtual void FinishTask() // The event itself cannot be called
+                                                // in derived classes (https://stackoverflow.com/a/31661451)
             {
                 OnTaskFinished();
             }
@@ -51,21 +56,42 @@ namespace VirtualAgentsFramework
         /// </summary>
         public abstract class AgentComplexTask : IAgentTask
         {
+            /// <summary>
+            /// Reference to a corresponding agent
+            /// <summary>
             protected Agent agent;
 
+            /// <summary>
+            /// Fire when the task is finished to let the agent know.
+            /// The OnTaskFinished event itself cannot be called directly,
+            /// so use the ScheduleTaskTermination() method instead
+            /// <summary>
             public event Action OnTaskFinished;
 
-            // Any AgentTask can be scheduled as a subtask, including complex AgentTasks
+            /// <summary>
+            /// Any AgentTask can be scheduled as a subtask, including complex AgentTasks
+            /// <summary>
             protected AgentTaskManager subTaskQueue;
 
-            // Current subtask execution state
+            /// <summary>
+            /// Current subtask execution state
+            /// <summary>
             protected State currentState;
 
+            /// <summary>
+            /// Task's current subtask
+            /// </summary>
             protected IAgentTask currentSubTask;
 
+            /// <summary>
+            /// Signalizes when to prepare for task termination
+            /// </summary>
             protected bool finishFlag = false;
 
-            protected void RequestNextSubTask() //TODO create a default implementation
+            /// <summary>
+            /// Request the next subtask from the task's subtask queue
+            /// </summary>
+            protected void RequestNextSubTask()
             {
                 IAgentTask nextSubTask = subTaskQueue.RequestNextTask();
                 if(nextSubTask == null)
@@ -88,6 +114,10 @@ namespace VirtualAgentsFramework
                 }
             }
 
+            /// <summary>
+            /// Helper function to be called when a subtask has been executed.
+            /// Set task's state to idle and unsubscribe from the terminated subtask's OnTaskFinished event
+            /// </summary>
             protected void OnSubTaskFinished()
             {
                 currentState = State.idle;
@@ -95,11 +125,20 @@ namespace VirtualAgentsFramework
                 currentSubTask.OnTaskFinished -= OnSubTaskFinished;
             }
 
-            protected void FinishTask()
+            /// </summary>
+            /// The OnTaskFinished event itself cannot be called directly,
+            /// so use this method instead
+            /// </summary>
+            protected void ScheduleTaskTermination()
             {
                 finishFlag = true;
             }
 
+            /// </summary>
+            /// Get the agent's data, prepare for subtask scheduling and execution.
+            /// If you override this function, you might still want to call it
+            /// using base.Execute(yourAgent)
+            /// </summary>
             public virtual void Execute(Agent agent)
             {
                 this.agent = agent;
@@ -108,6 +147,11 @@ namespace VirtualAgentsFramework
                 currentState = State.idle;
             }
 
+            /// </summary>
+            /// Perform frame-to-frame subtask management and execution.
+            /// If you override this function, you still want to call it
+            /// using base.Update() for subtask management
+            /// </summary>
             public virtual void Update()
             {
                 switch(currentState)
@@ -124,6 +168,9 @@ namespace VirtualAgentsFramework
             }
         }
 
+        /// <summary>
+        /// Possible subtask execution states
+        /// </summary>
         public enum State
         {
             inactive, // i.e. requesting new subtasks is disabled

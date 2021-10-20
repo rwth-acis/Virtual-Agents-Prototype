@@ -17,6 +17,10 @@ namespace VirtualAgentsFramework
 {
     namespace AgentTasks
     {
+        /// <summary>
+        /// Define tasks for playing a procedural pointing animation
+        /// towards a versatile position. Using parallel coroutines
+        /// </summary>
         public class AgentPointingTask : IAgentTask
         {
             private Agent agent;

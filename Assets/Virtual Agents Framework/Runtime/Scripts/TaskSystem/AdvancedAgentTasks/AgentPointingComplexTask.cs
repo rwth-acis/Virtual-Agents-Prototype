@@ -17,6 +17,10 @@ namespace VirtualAgentsFramework
 {
     namespace AgentTasks
     {
+        /// <summary>
+        /// Define tasks for playing a procedural pointing animation
+        /// towards a versatile position. Using non-parallel subtasks
+        /// </summary>
         public class AgentPointingComplexTask : AgentComplexTask
         {
             private GameObject destinationObject = null;
@@ -57,7 +61,7 @@ namespace VirtualAgentsFramework
                 subTaskQueue.AddTask(new AgentWaitingTask(1f));
                 subTaskQueue.AddTask(new ChangeRigWeightSubTask(twistChain, 0f));
                 subTaskQueue.AddTask(new ChangeRigWeightSubTask(leftArmStretch, 0f));
-                FinishTask();
+                ScheduleTaskTermination();
             }
         }
 
