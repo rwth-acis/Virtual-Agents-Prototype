@@ -46,7 +46,6 @@ namespace VirtualAgentsFramework
             AgentMovementTask quickExitTask = new AgentMovementTask(exitDestinationPosition, true); // true makes the agent run instead of walking
             // Assign the task:
             agent.ScheduleTask(quickExitTask); // run to exitDestinationPosition
-
         }
 
         void Update() {}

@@ -38,6 +38,7 @@ namespace VirtualAgentsFramework
 
             private bool isMoving;
             private const float destinationReachedTreshold = 1.5f;
+            private float frames = 5;
 
             public event Action OnTaskFinished;
 
@@ -131,6 +132,11 @@ namespace VirtualAgentsFramework
                             {
                                 isMoving = false;
                                 // Trigger the TaskFinished event
+                                if(run == true && frames != 0) // Skip several frames until running is stopped
+                                {
+                                    frames--;
+                                    return;
+                                }
                                 OnTaskFinished();
                             }
                         }
