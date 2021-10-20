@@ -32,11 +32,6 @@ namespace VirtualAgentsFramework
             agent.RotateTowards(new Vector3(-0.9f, 0, -4.6f)); // rotate towards the center of the room
             agent.PointTo(picture, twist, leftArmStretch, stretchTarget); // play a procedural pointing animation
 
-            agent.WaitForSeconds(1f);
-
-            agent.RotateTowards(table.transform.position);
-            agent.PointTo(mouse, twist, leftArmStretch, stretchTarget);
-
             // Walking and picking up sequence
             agent.WalkTo(table);
             agent.PickUp(mouse, grabTarget);
