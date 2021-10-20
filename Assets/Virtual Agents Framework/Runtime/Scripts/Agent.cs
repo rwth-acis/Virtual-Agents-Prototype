@@ -250,7 +250,11 @@ namespace VirtualAgentsFramework
         }
 
         //TODO
-        public void PickUp() {}
+        public void PickUp(GameObject destinationObject, GameObject rigTarget, bool asap = false)
+        {
+            rigTarget.transform.position = destinationObject.transform.position;
+            PlayAnimation("PickingUp", asap);
+        }
 
         /// <summary>
         /// Creates an AgentRotationTask and schedules it or forces its execution.

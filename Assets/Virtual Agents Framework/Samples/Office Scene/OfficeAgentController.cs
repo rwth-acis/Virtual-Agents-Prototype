@@ -9,8 +9,8 @@ namespace VirtualAgentsFramework
     public class OfficeAgentController : MonoBehaviour
     {
         [SerializeField] Agent agent;
-        [SerializeField] GameObject EntranceDestinationObject;
-        Vector3 ExitDestinationPosition = new Vector3(-2.265f, -0.833f, -12.492f);
+        [SerializeField] GameObject entranceDestinationObject;
+        Vector3 exitDestinationPosition = new Vector3(-2.265f, -0.8f, -12.492f);
         [SerializeField] GameObject printer;
         [SerializeField] GameObject picture;
         [SerializeField] GameObject table;
@@ -18,37 +18,35 @@ namespace VirtualAgentsFramework
 
         [SerializeField] Rig twist;
         [SerializeField] Rig leftArmStretch;
-        [SerializeField] GameObject rigTarget;
+        [SerializeField] GameObject stretchTarget;
+
+        [SerializeField] GameObject grabTarget;
 
         void Start()
         {
-            //Option 2: use shortcuts
-            /*agent.RunTo(object2);
-            agent.WalkTo(gameObject);
-            agent.PlayAnimation("Dancing", true); // true forces the task
-            agent.WalkTo(object2);
-            agent.WaitForSeconds(2f);
-            agent.WalkTo(gameObject);*/
+            //Option 1: use shortcut functions to create and assign tasks
+            agent.WalkTo(entranceDestinationObject);
+            agent.PlayAnimation("Dancing", true); // true prioritizes the task
 
-            agent.WalkTo(new Vector3(-1.5f, 0, -3.2f));
-
-            agent.RotateTowards(new Vector3(-0.9f, 0, -4.6f));
-            agent.PointTo(picture, twist, leftArmStretch, rigTarget); // schedule my procedural animation
-            agent.WaitForSeconds(1f);
-            agent.PlayAnimation("Pointing"); // schedule a modified Mixamo animation
+            agent.WalkTo(printer);
+            agent.RotateTowards(new Vector3(-0.9f, 0, -4.6f)); // rotate towards the center of the room
+            agent.PointTo(picture, twist, leftArmStretch, stretchTarget); // play a procedural pointing animation
 
             agent.WaitForSeconds(1f);
 
-            agent.RotateTowards(new Vector3(-3.4f, 0, -5.2f));
-            agent.PointTo(table, twist, leftArmStretch, rigTarget);
-            agent.WaitForSeconds(1f);
-            agent.PlayAnimation("Pointing");
+            agent.RotateTowards(table.transform.position);
+            agent.PointTo(mouse, twist, leftArmStretch, stretchTarget);
 
             // Walking and picking up sequence
-            //agent.WalkTo(table);
-            //agent.PickUp(mouse); // My procedural animation
-            //agent.WaitForSeconds(1f);
-            //agent.PlayAnimation("PickingUp");
+            agent.WalkTo(table);
+            agent.PickUp(mouse, grabTarget);
+
+            // Option 2: create and assign tasks manually
+            // Create a task:
+            AgentMovementTask quickExitTask = new AgentMovementTask(exitDestinationPosition, true); // true makes the agent run instead of walking
+            // Assign the task:
+            agent.ScheduleTask(quickExitTask); // run to exitDestinationPosition
+
         }
 
         void Update() {}
