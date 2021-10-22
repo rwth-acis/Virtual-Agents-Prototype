@@ -30,11 +30,11 @@ namespace VirtualAgentsFramework
 
             //Option 2: use shortcuts
             agent.RunTo(object2);
-            agent.WalkTo(gameObject);
+            agent.WalkTo(gameObject, false);
             agent.PlayAnimation("Dancing", true); // true forces the task
-            agent.WalkTo(object2);
+            agent.WalkTo(object2, false);
             agent.WaitForSeconds(2f);
-            agent.WalkTo(gameObject);
+            agent.WalkTo(gameObject, false);
         }
 
         void Update() {}
