@@ -29,7 +29,7 @@ namespace VirtualAgentsFramework
             agent.PlayAnimation("Dancing", true); // true prioritizes the task
 
             agent.WalkTo(printer);
-            agent.RotateTowards(new Vector3(-0.9f, 0, -4.6f)); // rotate towards the center of the room
+            agent.RotateTowards(new Vector3(5.5f, 0, -5.5f)); // rotate towards the center of the room
             agent.PointTo(picture, twist, leftArmStretch, stretchTarget); // play a procedural pointing animation
 
             // Walking and picking up sequence
