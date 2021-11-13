@@ -1,12 +1,5 @@
 {
   "dependencies": {
-    "com.autodesk.fbx": {
-      "version": "4.0.1",
-      "depth": 1,
-      "source": "registry",
-      "dependencies": {},
-      "url": "https://packages.unity.com"
-    },
     "com.i5.virtualagents": {
       "version": "file:../Assets/Virtual Agents Framework",
       "depth": 0,
@@ -32,13 +25,6 @@
       },
       "url": "https://packages.unity.com"
     },
-    "com.unity.cinemachine": {
-      "version": "2.6.10",
-      "depth": 0,
-      "source": "registry",
-      "dependencies": {},
-      "url": "https://packages.unity.com"
-    },
     "com.unity.collab-proxy": {
       "version": "1.9.0",
       "depth": 0,
@@ -51,25 +37,6 @@
       "depth": 1,
       "source": "registry",
       "dependencies": {},
-      "url": "https://packages.unity.com"
-    },
-    "com.unity.formats.fbx": {
-      "version": "4.0.1",
-      "depth": 0,
-      "source": "registry",
-      "dependencies": {
-        "com.unity.timeline": "1.0.0",
-        "com.autodesk.fbx": "4.0.1"
-      },
-      "url": "https://packages.unity.com"
-    },
-    "com.unity.ide.rider": {
-      "version": "2.0.7",
-      "depth": 0,
-      "source": "registry",
-      "dependencies": {
-        "com.unity.test-framework": "1.1.1"
-      },
       "url": "https://packages.unity.com"
     },
     "com.unity.ide.visualstudio": {
@@ -110,15 +77,6 @@
         "com.unity.ext.nunit": "1.0.6",
         "com.unity.modules.imgui": "1.0.0",
         "com.unity.modules.jsonserialize": "1.0.0"
-      },
-      "url": "https://packages.unity.com"
-    },
-    "com.unity.textmeshpro": {
-      "version": "3.0.6",
-      "depth": 0,
-      "source": "registry",
-      "dependencies": {
-        "com.unity.ugui": "1.0.0"
       },
       "url": "https://packages.unity.com"
     },
