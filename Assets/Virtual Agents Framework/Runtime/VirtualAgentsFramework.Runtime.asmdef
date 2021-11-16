@@ -1,0 +1,16 @@
+{
+    "name": "VirtualAgentsFramework.Runtime",
+    "rootNamespace": "",
+    "references": [
+        "Siccity.GLTFUtility"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}
