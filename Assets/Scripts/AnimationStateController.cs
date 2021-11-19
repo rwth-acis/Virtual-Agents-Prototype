@@ -10,7 +10,6 @@ public class AnimationStateController : MonoBehaviour
     void Start()
     {
           animator = GetComponent<Animator>();
-          Debug.Log(animator);
     }
 
     // Update is called once per frame

@@ -24,13 +24,16 @@ public class CharacterAgent : MonoBehaviour
 
     // Update is called once per frame
     void Update()
-    {
-        agent.SetDestination(destination.transform.position);
+    { 
+        if (destination != null)
+        {
+            agent.SetDestination(destination.transform.position);
+        }
 
         Vector3 curMove = transform.position - previousPosition;
         curSpeed = curMove.magnitude / Time.deltaTime;
         previousPosition = transform.position;
-        Debug.Log(curSpeed);
+        //Debug.Log(curSpeed);
 
         if (agent.remainingDistance > agent.stoppingDistance)
         {

@@ -1,7 +1,7 @@
 fileFormatVersion: 2
 guid: e30c19a9cb564f648a7ff762a3e673bd
 ModelImporter:
-  serializedVersion: 19301
+  serializedVersion: 20200
   internalIDToNameTable:
   - first:
       1: 100000
@@ -1061,7 +1061,7 @@ ModelImporter:
       does not match position in animation file:\n\t'char_LowMan_LeftUpLeg' : position
       error = 11482.129883 mm\n\t'char_LowMan_LeftLeg' : position error = 42012.339844
       mm\n\t'char_LowMan_LeftFoot' : position error = 36090.746094 mm\n\t'char_LowMan_LeftToeBase'
-      : position error = 18618.664062 mm\n\t'char_LowMan_RightUpLeg' : position error
+      : position error = 18618.664063 mm\n\t'char_LowMan_RightUpLeg' : position error
       = 11482.129883 mm\n\t'char_LowMan_RightLeg' : position error = 42012.347656
       mm\n\t'char_LowMan_RightFoot' : position error = 36090.765625 mm\n\t'char_LowMan_RightToeBase'
       : position error = 18618.669922 mm\n\t'char_LowMan_Spine' : position error
@@ -1435,6 +1435,7 @@ ModelImporter:
     useFileUnits: 1
     keepQuads: 0
     weldVertices: 1
+    bakeAxisConversion: 0
     preserveHierarchy: 0
     skinWeightsMode: 0
     maxBonesPerVertex: 4
@@ -1444,6 +1445,9 @@ ModelImporter:
     secondaryUVAngleDistortion: 8
     secondaryUVAreaDistortion: 15.000001
     secondaryUVHardAngle: 88
+    secondaryUVMarginMethod: 1
+    secondaryUVMinLightmapResolution: 40
+    secondaryUVMinObjectScale: 1
     secondaryUVPackMargin: 4
     useFileScale: 0
   tangentSpace:
@@ -1864,6 +1868,7 @@ ModelImporter:
   animationType: 3
   humanoidOversampling: 1
   avatarSetup: 1
+  addHumanoidExtraRootOnlyWhenUsingAvatar: 0
   additionalBone: 0
   userData: 
   assetBundleName: 

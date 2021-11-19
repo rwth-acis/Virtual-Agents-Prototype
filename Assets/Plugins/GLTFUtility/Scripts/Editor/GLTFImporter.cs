@@ -1,13 +1,13 @@
-﻿using UnityEditor.Experimental.AssetImporters;
+﻿
 using UnityEngine;
 
 namespace Siccity.GLTFUtility {
-	[ScriptedImporter(1, "gltf")]
-	public class GLTFImporter : ScriptedImporter {
+	[UnityEditor.AssetImporters.ScriptedImporter(1, "gltf")]
+	public class GLTFImporter : UnityEditor.AssetImporters.ScriptedImporter {
 
 		public ImportSettings importSettings;
 
-		public override void OnImportAsset(AssetImportContext ctx) {
+		public override void OnImportAsset(UnityEditor.AssetImporters.AssetImportContext ctx) {
 			// Load asset
 			AnimationClip[] animations;
 			if (importSettings == null) importSettings = new ImportSettings();

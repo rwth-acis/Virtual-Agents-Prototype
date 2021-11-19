@@ -1,13 +1,13 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using UnityEditor;
-using UnityEditor.Experimental.AssetImporters;
+
 using UnityEngine;
 
 namespace Siccity.GLTFUtility {
 	/// <summary> Contains methods for saving a gameobject as an asset </summary>
 	public static class GLTFAssetUtility {
-		public static void SaveToAsset(GameObject root, AnimationClip[] animations, AssetImportContext ctx) {
+		public static void SaveToAsset(GameObject root, AnimationClip[] animations, UnityEditor.AssetImporters.AssetImportContext ctx) {
 #if UNITY_2018_2_OR_NEWER
 			ctx.AddObjectToAsset("main", root);
 			ctx.SetMainObject(root);
@@ -22,7 +22,7 @@ namespace Siccity.GLTFUtility {
 			AddAnimations(animations, ctx);
 		}
 
-		public static void AddMeshes(MeshFilter[] filters, SkinnedMeshRenderer[] skinnedRenderers, AssetImportContext ctx) {
+		public static void AddMeshes(MeshFilter[] filters, SkinnedMeshRenderer[] skinnedRenderers, UnityEditor.AssetImporters.AssetImportContext ctx) {
 			HashSet<Mesh> visitedMeshes = new HashSet<Mesh>();
 			for (int i = 0; i < filters.Length; i++) {
 				Mesh mesh = filters[i].sharedMesh;
@@ -38,7 +38,7 @@ namespace Siccity.GLTFUtility {
 			}
 		}
 
-		public static void AddAnimations(AnimationClip[] animations, AssetImportContext ctx) {
+		public static void AddAnimations(AnimationClip[] animations, UnityEditor.AssetImporters.AssetImportContext ctx) {
 			if (animations == null) return;
 			HashSet<AnimationClip> visitedAnimations = new HashSet<AnimationClip>();
 			for (int i = 0; i < animations.Length; i++) {
@@ -49,7 +49,7 @@ namespace Siccity.GLTFUtility {
 			}
 		}
 
-		public static void AddMaterials(MeshRenderer[] renderers, SkinnedMeshRenderer[] skinnedRenderers, AssetImportContext ctx) {
+		public static void AddMaterials(MeshRenderer[] renderers, SkinnedMeshRenderer[] skinnedRenderers, UnityEditor.AssetImporters.AssetImportContext ctx) {
 			HashSet<Material> visitedMaterials = new HashSet<Material>();
 			HashSet<Texture2D> visitedTextures = new HashSet<Texture2D>();
 			for (int i = 0; i < renderers.Length; i++) {
@@ -93,7 +93,7 @@ namespace Siccity.GLTFUtility {
 			}
 		}
 
-		public static void AddAsset(this AssetImportContext ctx, string identifier, Object obj) {
+		public static void AddAsset(this UnityEditor.AssetImporters.AssetImportContext ctx, string identifier, Object obj) {
 #if UNITY_2018_2_OR_NEWER
 			ctx.AddObjectToAsset(identifier, obj);
 #else
