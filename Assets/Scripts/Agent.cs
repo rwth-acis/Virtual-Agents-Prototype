@@ -54,7 +54,7 @@ namespace VirtualAgentsFramework
             currentState = State.idle;
             currentProcess = Processes.None;
 
-            string exercisejson = "[{\"Name\":\"Exercise one\",\"Place\":\"(3, 1, 4)\",\"Steps\":[{\"Message\":\"First, your have to put the filament in the extruder which is on the top of the printer. Then, you can chose your custom settings and chose the model you want to print.\",\"Actions\":[\"UsingLaserCutter\"]},{\"Message\":\"From the begining of the print, til the completed result several hours may pass.\",\"Actions\":[\"Talking1\"]},{\"Message\":\"When the print is done, you can take the build plate with your printed model out of the printer.\",\"Actions\":[\"WaitingLaserCutter\"]}],\"Completed\":false},{\"Name\":\"Exercise two\",\"Place\":\"(3, 1, 4)\",\"Steps\":[{\"Message\":\"There is a variety of programs for creating a 3d model.\",\"Actions\":[\"Talking2\"]},{\"Message\":\"3d Print, Elephant and VAD are examples.I can introduce you to one of these, if you are interested.\",\"Actions\":[\"Talking3\"]}],\"Completed\":false}]";
+            string exercisejson = "[{\"Name\":\"Exercise one\",\"Place\":\"(3, 1, 4)\",\"Steps\":[{\"Message\":\"First, your have to put the filament in the extruder which is on the top of the printer. Then, you can choose your custom settings and choose the model you want to print.\",\"Actions\":[\"UsingLaserCutter\"]},{\"Message\":\"From the begining of the print, til the completed result several hours may pass.\",\"Actions\":[\"Talking1\"]},{\"Message\":\"When the print is done, you can take the build plate with your printed model out of the printer.\",\"Actions\":[\"WaitingLaserCutter\"]}],\"Completed\":false},{\"Name\":\"Exercise two\",\"Place\":\"(3, 1, 4)\",\"Steps\":[{\"Message\":\"There is a variety of programs for creating a 3d model.\",\"Actions\":[\"Talking2\"]},{\"Message\":\"3d Print, Elephant and VAD are examples of commonly used programs.\",\"Actions\":[\"Talking3\"]}],\"Completed\":false}]";
             string knowledgejson = "{\"IntroductionShown\":false,\"Introduction\":\"Hi, I am your virtual mentor. In this program you can ask lecture related questions and request suggestions regarding your learning process. I can also show and explain physical exercises if you ask me to. I will queue all your requests and help you one by one. I'd suggest we'll start right off! What would you like to know?\"}";
             //string output = JsonConvert.SerializeObject(exercise);
             string path = Path.Combine(Application.persistentDataPath, "Exercises.json");
@@ -119,8 +119,11 @@ namespace VirtualAgentsFramework
         // This method gets triggered by the Animator event
         public void ReturnToIdle()
         {
-            AgentAnimationTask currentAnimationTask = (AgentAnimationTask)currentTask;
-            currentAnimationTask.ReturnToIdle();
+            var currentAnimationTask = currentTask as AgentAnimationTask;
+            if(currentAnimationTask != null)
+            {
+                currentAnimationTask.ReturnToIdle();
+            }
         }
         public void CleanUpResult()
         {

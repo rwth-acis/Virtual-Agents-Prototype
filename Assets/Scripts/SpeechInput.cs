@@ -41,7 +41,9 @@ public class SpeechInput : MonoBehaviour
             {"Aufgabe zwei jetzt", "Aufgabe" },
             {"Klausurtermin", "Frage" },
             {"Was Drucker", "Frage"},
-            {"Wie lernen", "Vorschlag"}
+            {"Wie lernen", "Vorschlag"},
+            {"Help", "Frage"},
+            {"thanks", "Frage"}
         };
 
     public void OnVoiceCommand(string voiceInput)
@@ -90,6 +92,14 @@ public class SpeechInput : MonoBehaviour
         {
             return "A machine allowing the creation of a physical object from a three dimensional digital model, typically by laying down many thin layers of a material in succession.";
         }
+        if (voiceInput.Contains("Help"))
+        {
+            return "I can help you in the following way. You can ask when the exam is scheduled. You can also ask how you can prepare for the exam. If you tell me to show the first or second exercise, I will show and explain these to you. If you ask for more than one exercise, I will queue your requests. You can skip queued exercises by saying next. You can also force exercises to be shown directly by saying exercise one or exercise two, now.";
+        }
+        if (voiceInput.Contains("thanks"))
+        {
+            return "You're welcome.";
+        }
         if (voiceInput.Contains("Wie"))
         {
             //Get Info from Exercise JSON
@@ -100,7 +110,7 @@ public class SpeechInput : MonoBehaviour
             if (exercises.Any(e => e.Completed == false))
             {
                 int index = exercises.FindIndex(e => e.Completed == false);
-                return "You haven't watched " + exercises[index].Name + "yet. That would be a good idea.";
+                return "You haven't watched " + exercises[index].Name + " yet. That would be a good idea.";
             }
             return "You could repeat recordings from the lectures";
         }
