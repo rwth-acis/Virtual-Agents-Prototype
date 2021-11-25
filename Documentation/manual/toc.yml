@@ -1,12 +1,12 @@
 - name: Introduction
   href: intro.md
-- name: How to create a functional virtual agent
+- name: How to Create a Functional Virtual Agent
   href: create_agent.md
-- name: How to exchange the avatar of the agent
+- name: How to Exchange the Avatar of the Agent
   href: exchange_avatar.md
-- name: How to assign tasks to a virtual agent
+- name: How to Assign Tasks to a Virtual Agent
   href: assign_tasks.md
-- name: How to add new animations to the agent and integrate them into the existing infrastructure
+- name: Adding New Animations
   href: add_animations.md
-- name: How to correctly set up a destination object
+- name: How to Correctly Set Up a Destination Object
   href: set_up_destination_object.md

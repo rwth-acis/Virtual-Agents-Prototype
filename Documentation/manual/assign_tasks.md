@@ -1,4 +1,4 @@
-# How to assign tasks to a virtual agent
+# How to Assign Tasks to a Virtual Agent
 
 ## Preparation
 
@@ -8,7 +8,8 @@
 
 ## Task management using shortcut functions
 
-The Agent class provides numerous methods for assigning tasks to the agent. For instance, you can use the following shortcut functions:
+The Agent class provides numerous methods for assigning tasks to the agent.
+For instance, you can use the following shortcut functions:
 
 ### Movement
 
@@ -29,4 +30,5 @@ WaitForSeconds(float secondsWaiting, bool asap = false)
 
 ## Task management using generic functions
 
-Alternatively, you can create IAgentTask tasks using the constructors in the agent task classes provided in the VirtualAgentsFramework.AgentTasks namespace. After this, you can use the methods ScheduleTask(IAgentTask task) and ExecuteTaskASAP(IAgentTask task) from the Agent class in order to assign the tasks you created to the agent.
+Alternatively, you can create IAgentTask tasks using the constructors in the agent task classes provided in the VirtualAgentsFramework.AgentTasks namespace.
+After this, you can use the methods ScheduleTask(IAgentTask task) and ExecuteTaskASAP(IAgentTask task) from the Agent class in order to assign the tasks you created to the agent.
