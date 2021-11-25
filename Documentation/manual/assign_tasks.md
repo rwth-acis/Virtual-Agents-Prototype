@@ -8,27 +8,27 @@
 
 ## Task management using shortcut functions
 
-The Agent class provides numerous methods for assigning tasks to the agent.
+The <xref:VirtualAgentsFramework.Agent> class provides numerous methods for assigning tasks to the agent.
 For instance, you can use the following shortcut functions:
 
 ### Movement
 
-- WalkTo(GameObject destinationObject, bool asap = false)
-- WalkTo(Vector3 destinationCoordinates, bool asap = false)
-- RunTo(GameObject destinationObject, bool asap = false)
-- RunTo(Vector3 destinationCoordinates, bool asap = false)
+- <xref:VirtualAgentsFramework.Agent.WalkTo(GameObject,System.Boolean)>
+- <xref:VirtualAgentsFramework.Agent.WalkTo(Vector3,System.Boolean)>
+- <xref:VirtualAgentsFramework.Agent.RunTo(GameObject,System.Boolean)>
+- <xref:VirtualAgentsFramework.Agent.RunTo(Vector3,System.Boolean)>
 
 ### Animation
 
-PlayAnimation(string animationName, bool asap = false)
+Use <xref:VirtualAgentsFramework.Agent.PlayAnimation(System.String,System.Boolean)> to play a custom animation.
 
 Make sure that the respective animation is available and correctly set up in your agent's Animator.
 
 ### Waiting
 
-WaitForSeconds(float secondsWaiting, bool asap = false)
+Use <xref:VirtualAgentsFramework.Agent.WaitForSeconds(System.Single,System.Boolean)> to make the agent wait for a designated time span.
 
-## Task management using generic functions
+## Task Management Using Generic Functions
 
-Alternatively, you can create IAgentTask tasks using the constructors in the agent task classes provided in the VirtualAgentsFramework.AgentTasks namespace.
-After this, you can use the methods ScheduleTask(IAgentTask task) and ExecuteTaskASAP(IAgentTask task) from the Agent class in order to assign the tasks you created to the agent.
+Alternatively, you can create <xref:VirtualAgentsFramework.AgentTasks.IAgentTask> tasks using the constructors in the agent task classes provided in the VirtualAgentsFramework.AgentTasks namespace.
+After this, you can use the methods <xref:VirtualAgentsFramework.Agent.ScheduleTask(IAgentTask)> and <xref:VirtualAgentsFramework.Agent.ExecuteTaskASAP(IAgentTask)> from the <xref:VirtualAgentsFramework.Agent> class in order to assign the tasks you created to the agent.
