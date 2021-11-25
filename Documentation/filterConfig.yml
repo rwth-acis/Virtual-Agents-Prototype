@@ -1,0 +1,19 @@
+apiRules:
+- exclude:
+    uidRegex: ^i5.VirtualAgents.Examples.*
+    type: Namespace
+- exclude:
+    uidRegex: ^i5.VirtualAgents.Tests.*
+    type: Namespace
+- include:
+    uidRegex: ^i5.*
+    type: Namespace
+- include:
+    uidRegex: VirtualAgentsFramework
+    type: Namespace
+- exclude:
+    uidRegex: ^Global
+    type: Namespace
+- exclude:
+    uidRegex: .*
+    type: Namespace
