@@ -1,6 +1,5 @@
 {
   "dependencies": {
-    "com.i5.virtualagents": "file:../Assets/Virtual Agents Framework",
     "com.unity.collab-proxy": "1.2.16",
     "com.unity.formats.fbx": "4.0.1",
     "com.unity.ide.rider": "1.1.4",
