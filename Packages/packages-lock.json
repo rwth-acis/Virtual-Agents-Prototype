@@ -7,12 +7,6 @@
       "dependencies": {},
       "url": "https://packages.unity.com"
     },
-    "com.i5.virtualagents": {
-      "version": "file:../Assets/Virtual Agents Framework",
-      "depth": 0,
-      "source": "local",
-      "dependencies": {}
-    },
     "com.unity.animation.rigging": {
       "version": "0.2.7-preview",
       "depth": 0,
@@ -111,8 +105,7 @@
       "depth": 0,
       "source": "builtin",
       "dependencies": {
-        "com.unity.modules.ui": "1.0.0",
-        "com.unity.modules.imgui": "1.0.0"
+        "com.unity.modules.ui": "1.0.0"
       }
     },
     "com.unity.modules.ai": {

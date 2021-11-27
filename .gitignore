@@ -72,3 +72,9 @@ crashlytics-build.properties
 # Temporary auto-generated Android Assets
 /[Aa]ssets/[Ss]treamingAssets/aa.meta
 /[Aa]ssets/[Ss]treamingAssets/aa/*
+/_site
+/Assets/Plugins/GLTFUtility/Plugins/draco/obj/xdoc/cache/obj
+/Assets/Plugins/GLTFUtility/Plugins/draco/obj/xdoc/cache/final
+/Documentation/obj/.cache/build
+/Assets/Plugins/GLTFUtility/Plugins/draco/obj
+/Assets/Plugins/GLTFUtility/Plugins/draco/obj.meta
