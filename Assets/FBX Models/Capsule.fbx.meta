@@ -1,0 +1,178 @@
+fileFormatVersion: 2
+guid: e21c6adab8906425fa38ceefcc896b77
+ModelImporter:
+  serializedVersion: 19301
+  internalIDToNameTable:
+  - first:
+      74: -8921741486181931930
+    second: HumanoidIdle
+  - first:
+      74: 4665062229375868052
+    second: StandQuarterTurnRight
+  - first:
+      74: -1041544049612287009
+    second: StandHalfTurnRight
+  - first:
+      74: 2234511741103839708
+    second: StandQuarterTurnLeft
+  - first:
+      74: 7835227736905968414
+    second: StandHalfTurnLeft
+  - first:
+      74: -66412410246225284
+    second: HumanoidWalk
+  - first:
+      74: 1279682535403804314
+    second: HumanoidWalkRightSharp
+  - first:
+      74: 5527501853578167894
+    second: HumanoidWalkRight
+  - first:
+      74: 1585400793689400145
+    second: HumanoidWalkLeftSharp
+  - first:
+      74: -4671166650988437859
+    second: HumanoidWalkLeft
+  - first:
+      74: -6774119851873688221
+    second: HumanoidRun
+  - first:
+      74: -7458291420537050830
+    second: HumanoidRunRightSharp
+  - first:
+      74: 5587510487046956654
+    second: HumanoidRunLeftSharp
+  - first:
+      74: 8863319009933138458
+    second: HumanoidRunRight
+  - first:
+      74: 7747643657970835977
+    second: HumanoidRunLeft
+  - first:
+      74: 1619336933420079213
+    second: HumanoidCrouchIdle
+  - first:
+      74: 5096024953858355067
+    second: HumanoidCrouchWalk
+  - first:
+      74: -3644677106534863502
+    second: HumanoidCrouchWalkLeft
+  - first:
+      74: 4343645438344457250
+    second: HumanoidCrouchWalkRightB
+  - first:
+      74: 8745310649264328696
+    second: HumanoidMidAirRight
+  - first:
+      74: -2199423624429127195
+    second: HumanoidJumpForwardRight
+  - first:
+      74: -2405631203009835189
+    second: HumanoidJumpForwardLeft
+  - first:
+      74: -711495374333116314
+    second: HumanoidFall
+  - first:
+      74: 8440940656024522804
+    second: HumanoidMidAirLeft
+  - first:
+      74: -7192557684099241071
+    second: HumanoidJumpUp
+  - first:
+      74: 1907450622312591694
+    second: HumanoidMidAir
+  - first:
+      74: -6508319523170976072
+    second: Hip Hop Dancing
+  externalObjects: {}
+  materials:
+    materialImportMode: 1
+    materialName: 0
+    materialSearch: 1
+    materialLocation: 1
+  animations:
+    legacyGenerateAnimations: 4
+    bakeSimulation: 0
+    resampleCurves: 1
+    optimizeGameObjects: 0
+    motionNodeName: 
+    rigImportErrors: 
+    rigImportWarnings: 
+    animationImportErrors: 
+    animationImportWarnings: 
+    animationRetargetingWarnings: 
+    animationDoRetargetingWarnings: 0
+    importAnimatedCustomProperties: 0
+    importConstraints: 0
+    animationCompression: 1
+    animationRotationError: 0.5
+    animationPositionError: 0.5
+    animationScaleError: 0.5
+    animationWrapMode: 0
+    extraExposedTransformPaths: []
+    extraUserProperties: []
+    clipAnimations: []
+    isReadable: 0
+  meshes:
+    lODScreenPercentages: []
+    globalScale: 1
+    meshCompression: 0
+    addColliders: 0
+    useSRGBMaterialColor: 1
+    sortHierarchyByName: 1
+    importVisibility: 1
+    importBlendShapes: 1
+    importCameras: 1
+    importLights: 1
+    fileIdsGeneration: 2
+    swapUVChannels: 0
+    generateSecondaryUV: 0
+    useFileUnits: 1
+    keepQuads: 0
+    weldVertices: 1
+    preserveHierarchy: 0
+    skinWeightsMode: 0
+    maxBonesPerVertex: 4
+    minBoneWeight: 0.001
+    meshOptimizationFlags: -1
+    indexFormat: 0
+    secondaryUVAngleDistortion: 8
+    secondaryUVAreaDistortion: 15.000001
+    secondaryUVHardAngle: 88
+    secondaryUVPackMargin: 4
+    useFileScale: 1
+  tangentSpace:
+    normalSmoothAngle: 60
+    normalImportMode: 0
+    tangentImportMode: 3
+    normalCalculationMode: 4
+    legacyComputeAllNormalsFromSmoothingGroupsWhenMeshHasBlendShapes: 0
+    blendShapeNormalImportMode: 1
+    normalSmoothingSource: 0
+  referencedClips: []
+  importAnimation: 1
+  humanDescription:
+    serializedVersion: 3
+    human: []
+    skeleton: []
+    armTwist: 0.5
+    foreArmTwist: 0.5
+    upperLegTwist: 0.5
+    legTwist: 0.5
+    armStretch: 0.05
+    legStretch: 0.05
+    feetSpacing: 0
+    globalScale: 1
+    rootMotionBoneName: 
+    hasTranslationDoF: 0
+    hasExtraRoot: 0
+    skeletonHasParents: 1
+  lastHumanDescriptionAvatarSource: {instanceID: 0}
+  autoGenerateAvatarMappingIfUnspecified: 1
+  animationType: 2
+  humanoidOversampling: 1
+  avatarSetup: 0
+  additionalBone: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

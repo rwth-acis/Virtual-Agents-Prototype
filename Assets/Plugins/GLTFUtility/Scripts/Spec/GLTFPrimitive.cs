@@ -1,7 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using Newtonsoft.Json;
+﻿using Newtonsoft.Json;
 using UnityEngine.Scripting;
+using System.Collections.Generic;
 
 namespace Siccity.GLTFUtility {
 	// https://github.com/KhronosGroup/glTF/blob/master/specification/2.0/README.md#primitive
@@ -13,7 +12,6 @@ namespace Siccity.GLTFUtility {
 		public int? material;
 		/// <summary> Morph targets </summary>
 		public List<GLTFAttributes> targets;
-		public Extensions extensions;
 
 		[Preserve] public class GLTFAttributes {
 			public int? POSITION;
@@ -36,15 +34,6 @@ namespace Siccity.GLTFUtility {
 			public int? WEIGHTS_1;
 			public int? WEIGHTS_2;
 			public int? WEIGHTS_3;
-		}
-
-		[Preserve] public class Extensions {
-			public DracoMeshCompression KHR_draco_mesh_compression;
-		}
-
-		[Preserve] public class DracoMeshCompression {
-			public int bufferView = 0;
-			public GLTFAttributes attributes;
 		}
 	}
 }

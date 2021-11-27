@@ -29,12 +29,12 @@ namespace VirtualAgentsFramework
             agent.AddTask(movementTask2);     // Walk to object 1*/
 
             //Option 2: use shortcuts
-            agent.RunTo(object2);
+            /*agent.RunTo(object2);
             agent.WalkTo(gameObject);
             agent.PlayAnimation("Dancing", true); // true forces the task
             agent.WalkTo(object2);
             agent.WaitForSeconds(2f);
-            agent.WalkTo(gameObject);
+            agent.WalkTo(gameObject);*/
         }
 
         void Update() {}
