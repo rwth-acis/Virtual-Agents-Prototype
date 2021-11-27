@@ -3,13 +3,9 @@
   "version": "1.0.0",
   "displayName": "Virtual Agents Framework",
   "description": "A Unity package for creating virtual agents",
-  "unity": "2019.4",
+  "unity": "2020.2",
   "author": {
-    "name": "Danylo Bekhter\nAdvanced Community Information Systems\nInformatik 5, RWTH Aachen University",
-    "email": "danylo.bekhter@rwth-aachen.de"
-  },
-  "author": {
-    "name": "Benedikt Hensen\nAdvanced Community Information Systems\nInformatik 5, RWTH Aachen University",
+    "name": "Advanced Community Information Systems\nInformatik 5, RWTH Aachen University",
     "url": "http://dbis.rwth-aachen.de/cms"
   },
     "samples": [

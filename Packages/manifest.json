@@ -1,6 +1,5 @@
 {
   "dependencies": {
-    "com.i5.virtualagents": "file:../Assets/Virtual Agents Framework",
     "com.unity.animation.rigging": "1.0.3",
     "com.unity.timeline": "1.4.8",
     "com.unity.ugui": "1.0.0",
