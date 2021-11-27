@@ -2,7 +2,8 @@
     "name": "VirtualAgentsFramework.Runtime",
     "rootNamespace": "",
     "references": [
-        "Siccity.GLTFUtility"
+        "Siccity.GLTFUtility",
+        "Unity.Animation.Rigging"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],
