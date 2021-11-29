@@ -3,7 +3,8 @@
     "rootNamespace": "",
     "references": [
         "Siccity.GLTFUtility",
-        "Unity.Animation.Rigging"
+        "Unity.Animation.Rigging",
+        "StandardAssets"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],
