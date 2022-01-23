@@ -1,8 +1,6 @@
 using UnityEngine;
 // NavMesh
 using UnityEngine.AI;
-// Third person animation
-using UnityStandardAssets.Characters.ThirdPerson;
 // IEnumerator
 using System.Collections;
 // Tasks
@@ -24,7 +22,6 @@ namespace VirtualAgentsFramework
         {
             private Agent agent;
             private NavMeshAgent navMeshAgent;
-            private ThirdPersonCharacter thirdPersonCharacter;
             private Animator animator;
             private Vector3 rotation;
 
@@ -50,7 +47,6 @@ namespace VirtualAgentsFramework
             {
                 this.agent = agent;
                 navMeshAgent = agent.GetComponent<NavMeshAgent>();
-                thirdPersonCharacter = agent.GetComponent<ThirdPersonCharacter>();
                 animator = agent.GetComponent<Animator>();
             }
 

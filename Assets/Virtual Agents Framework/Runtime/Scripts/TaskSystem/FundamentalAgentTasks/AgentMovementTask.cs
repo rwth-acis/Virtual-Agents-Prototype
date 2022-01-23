@@ -1,8 +1,6 @@
 using UnityEngine;
 // NavMesh
 using UnityEngine.AI;
-// Third person animation
-using UnityStandardAssets.Characters.ThirdPerson;
 // IEnumerator
 using System.Collections;
 // Tasks
