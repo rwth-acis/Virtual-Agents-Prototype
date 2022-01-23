@@ -20,7 +20,7 @@ namespace VirtualAgentsFramework
     /// responding to task execution statuses and changing one's state accordingly
     /// </summary>
     [RequireComponent(typeof(NavMeshAgent))] // Responsible for the proxy object's movement
-    [RequireComponent(typeof(ThirdPersonCharacter))] // Responsible for the avatar's movement
+    [RequireComponent(typeof(AgentAnimationUpdater))] // Responsible for the avatar's movement
     public class Agent : MonoBehaviour
     {
         private NavMeshAgent agent;

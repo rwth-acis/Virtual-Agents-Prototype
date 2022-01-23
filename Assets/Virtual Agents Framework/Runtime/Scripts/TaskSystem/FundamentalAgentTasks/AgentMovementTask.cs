@@ -24,21 +24,17 @@ namespace VirtualAgentsFramework
         {
             Agent agent;
             NavMeshAgent navMeshAgent;
-            ThirdPersonCharacter thirdPersonCharacter;
+            AgentAnimationUpdater animationUpdater;
 
             private GameObject destinationObject = null;
             private bool run;
 
             private const float walkingSpeed = 1.8f;
             private const float runningSpeed = 4;
-            private const float damping = 6;
 
-            private Vector3 previousPosition;
-            private float curSpeed;
-
-            private bool isMoving;
-            private const float destinationReachedTreshold = 1.5f;
-            private float frames = 5;
+            //When the agent stands still for standingFrames frames, the task finishes
+            private const float standingFrames = 2;
+            private float standingFrameCounter = 0;
 
             public event Action OnTaskFinished;
 
@@ -82,7 +78,9 @@ namespace VirtualAgentsFramework
             {
                 this.agent = agent;
                 navMeshAgent = agent.GetComponent<NavMeshAgent>();
-                thirdPersonCharacter = agent.GetComponent<ThirdPersonCharacter>();
+                navMeshAgent.updateRotation = true;
+                navMeshAgent.updatePosition = true;
+                animationUpdater = agent.GetComponent<AgentAnimationUpdater>();
 
                 // Set running or walking speed
                 if(run == true)
@@ -94,53 +92,33 @@ namespace VirtualAgentsFramework
                     navMeshAgent.speed = walkingSpeed;
                 }
 
-                // Change agent's status to moving (busy)
-                isMoving = true;
                 //TODO destroy destination object upon execution (if one was created)
             }
 
             /// <summary>
-            /// Perform movement as long as the destination is not reached
+            /// Update the animations as long as the agent still moves. When the NavmeshAgent didn't move this agent for standingFrames frames, the task is finished
             /// </summary>
             public void Update()
             {
-                if(destinationObject != null)
+                if (destinationObject != null)
                 {
                     navMeshAgent.SetDestination(destinationObject.transform.position);
                 }
 
-                // Calculate actual speed
-                Vector3 curMove = agent.transform.position - previousPosition;
-                curSpeed = curMove.magnitude / Time.deltaTime;
-                previousPosition = agent.transform.position;
+                animationUpdater.updateAnimatiorParameters();
 
-                // Control movement
-                if (navMeshAgent.remainingDistance > navMeshAgent.stoppingDistance)
+                if (navMeshAgent.desiredVelocity.magnitude < 0.001f)
                 {
-                    thirdPersonCharacter.Move(navMeshAgent.desiredVelocity * curSpeed/damping, false, false);
+                    standingFrameCounter++;
                 }
                 else
                 {
-                    thirdPersonCharacter.Move(Vector3.zero, false, false);
-                    // Check if the agent has really reached its destination
-                    if(destinationObject != null)
-                    {
-                        float distanceToTarget = Vector3.Distance(agent.gameObject.transform.position, destinationObject.transform.position);
-                        if(distanceToTarget <= destinationReachedTreshold)
-                        {
-                            if (isMoving == true)
-                            {
-                                isMoving = false;
-                                // Trigger the TaskFinished event
-                                if(run == true && frames != 0) // Skip several frames until running is stopped
-                                {
-                                    frames--;
-                                    return;
-                                }
-                                OnTaskFinished();
-                            }
-                        }
-                    }
+                    standingFrameCounter = 0;
+                }
+
+                if (standingFrameCounter >= standingFrames)
+                {
+                    OnTaskFinished();
                 }
             }
         }
