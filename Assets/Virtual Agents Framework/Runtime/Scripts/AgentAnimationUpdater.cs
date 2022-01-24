@@ -45,22 +45,7 @@ public class AgentAnimationUpdater : MonoBehaviour
 		_animIDAngularSpeed = Animator.StringToHash(angularSpeed);
 	}
 
-	public void startMovement(GameObject target)
-	{
-		this.target = target;
-		navMeshAgent.SetDestination(target.transform.position);
 
-		navMeshAgent.updateRotation = true;
-		navMeshAgent.updatePosition = true;
-	}
-
-	public void stopMovement()
-	{
-		target = null;
-
-		navMeshAgent.updateRotation = false;
-		navMeshAgent.updatePosition = false;
-	}
 
 	/// <summary>
 	/// Updates the animation parameters for the blend trees

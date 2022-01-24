@@ -88,7 +88,7 @@ namespace VirtualAgentsFramework
                     navMeshAgent.speed = walkingSpeed;
                 }
 
-                animationUpdater.startMovement(destinationObject);
+                startMovement();
 
                 //TODO destroy destination object upon execution (if one was created)
             }
@@ -109,8 +109,22 @@ namespace VirtualAgentsFramework
 
                 if (standingFrameCounter >= standingFrames)
                 {
+                    stopMovement();
                     OnTaskFinished();
                 }
+            }
+
+            private void startMovement()
+            {
+                navMeshAgent.SetDestination(destinationObject.transform.position);
+                navMeshAgent.updateRotation = true;
+                navMeshAgent.updatePosition = true;
+            }
+
+            private void stopMovement()
+            {
+                navMeshAgent.updateRotation = false;
+                navMeshAgent.updatePosition = false;
             }
         }
     }
