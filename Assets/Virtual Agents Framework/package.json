@@ -1,11 +1,18 @@
 {
-    "name": "com.i5.virtualagents",
-    "version": "1.0.0",
-    "displayName": "Virtual Agents Framework",
-    "description": "A Unity package for creating virtual agents",
-    "unity": "2019.4",
-    "author": {
-        "name": "Advanced Community Information Systems\nInformatik 5, RWTH Aachen University",
-        "url": "http://dbis.rwth-aachen.de/cms"
-    }
+  "name": "com.i5.virtualagents",
+  "version": "1.0.0",
+  "displayName": "Virtual Agents Framework",
+  "description": "A Unity package for creating virtual agents",
+  "unity": "2020.2",
+  "author": {
+    "name": "Advanced Community Information Systems\nInformatik 5, RWTH Aachen University",
+    "url": "http://dbis.rwth-aachen.de/cms"
+  },
+    "samples": [
+        {
+            "displayName": "Office Scene",
+            "description": "Example scene showcasing how existing agent tasks can be utilized",
+            "path": "Samples~/Office Scene"
+        }
+    ]
 }
