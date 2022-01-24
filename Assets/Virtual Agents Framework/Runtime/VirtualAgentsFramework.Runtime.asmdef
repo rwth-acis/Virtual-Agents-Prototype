@@ -1,0 +1,18 @@
+{
+    "name": "VirtualAgentsFramework.Runtime",
+    "rootNamespace": "",
+    "references": [
+        "Siccity.GLTFUtility",
+        "Unity.Animation.Rigging",
+        "StandardAssets"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

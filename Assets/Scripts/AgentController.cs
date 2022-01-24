@@ -18,6 +18,9 @@ namespace VirtualAgentsFramework
 
         [SerializeField] GameObject table;
         [SerializeField] GameObject mouse;
+        [SerializeField] GameObject walkTarget;
+        [SerializeField] GameObject scheduel1;
+        [SerializeField] GameObject scheduel2;
 
         void Start()
         {
@@ -39,38 +42,13 @@ namespace VirtualAgentsFramework
             agent.AddTask(movementTask2);     // Walk to object 1*/
 
             //Option 2: use shortcuts
-            /*agent.RunTo(object2);
-            agent.WalkTo(gameObject);
-            agent.PlayAnimation("Dancing", true); // true forces the task
-            agent.WalkTo(object2);
-            agent.WaitForSeconds(2f);
-            agent.WalkTo(gameObject);*/
-            //agent.WalkTo(printer);
-            //agent.TurnHeadTo(button);
-            //agent.PressOn(button);
 
-            // Walking and pointing sequence
-            agent.WalkTo(new Vector3(-1.5f, 0, -3.2f));
-
-            agent.RotateTowards(new Vector3(-0.9f, 0, -4.6f));
-            agent.PointTo(picture, twist, leftArmStretch, leftArmStretchTarget); // schedule my procedural animation
-            agent.WaitForSeconds(1f);
-            agent.PlayAnimation("Pointing"); // schedule a modified Mixamo animation
-            
-            agent.WaitForSeconds(1f);
-
-            agent.RotateTowards(new Vector3(-3.4f, 0, -5.2f));
-            agent.PointTo(table, twist, leftArmStretch, leftArmStretchTarget);
-            agent.WaitForSeconds(1f);
-            agent.PlayAnimation("Pointing");
-
-            // Walking and picking up sequence
-            //agent.WalkTo(table);
-            //agent.PickUp(mouse); // My procedural animation
-            //agent.WaitForSeconds(1f);
-            //agent.PlayAnimation("PickingUp");
+            agent.WaitForSeconds(1);
+            agent.WalkTo(scheduel1);
+            agent.RunTo(scheduel1);
+            agent.WalkTo(scheduel2);
+            agent.RotateTowards(scheduel1.transform.position);
+            agent.PointTo(scheduel1,twist, leftArmStretch, leftArmStretchTarget);
         }
-
-        void Update() {}
     }
 }

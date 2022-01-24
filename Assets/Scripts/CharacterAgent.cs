@@ -3,14 +3,11 @@ using System.Collections.Generic;
 using UnityEngine;
 // NavMesh
 using UnityEngine.AI;
-// Third person animation
-using UnityStandardAssets.Characters.ThirdPerson;
 
 public class CharacterAgent : MonoBehaviour
 {
     public GameObject destination;
     public NavMeshAgent agent;
-    public ThirdPersonCharacter character;
     private const float damping = 8;
     private Vector3 previousPosition;
     private float curSpeed;
@@ -34,7 +31,7 @@ public class CharacterAgent : MonoBehaviour
 
         if (agent.remainingDistance > agent.stoppingDistance)
         {
-            character.Move(agent.desiredVelocity * curSpeed/damping, false, false);
+            //character.Move(agent.desiredVelocity * curSpeed/damping, false, false);
             /*if(!rigidBody.IsSleeping())
             {
                 // Character's movement is based on agent's desired movement. "False" for no crouching and no jumping
@@ -49,7 +46,7 @@ public class CharacterAgent : MonoBehaviour
         }
         else
         {
-            character.Move(Vector3.zero, false, false);
+            //character.Move(Vector3.zero, false, false);
         }
     }
 }
