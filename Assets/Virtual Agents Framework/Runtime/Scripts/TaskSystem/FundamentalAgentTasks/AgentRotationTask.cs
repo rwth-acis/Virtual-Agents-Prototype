@@ -21,87 +21,43 @@ namespace VirtualAgentsFramework
         public class AgentRotationTask : IAgentTask
         {
             private Agent agent;
-            private NavMeshAgent navMeshAgent;
-            private Animator animator;
-            private Vector3 rotation;
-
-            private float curSpeed;
-            private Vector3 previousRotation;
-            private const float damping = 20;
-
-            Vector3 targetPosition, targetPoint, direction;
-            Quaternion lookRotation;
-            float turnAmount;
-
-            private const float frameTimer = 100; //TODO make this obsolete using subtasks
-            private float frameCount = 0;
-
+            private Vector3 target;
             public event Action OnTaskFinished;
+            /// <summary>
+            /// In degree/s
+            /// </summary>
+            public float turnSpeed = 180;
 
-            public AgentRotationTask(Vector3 rotation)
+
+            public AgentRotationTask(Vector3 target)
             {
-                this.rotation = rotation;
+                this.target = target;
             }
 
             public void Execute(Agent agent)
             {
                 this.agent = agent;
-                navMeshAgent = agent.GetComponent<NavMeshAgent>();
-                animator = agent.GetComponent<Animator>();
             }
 
             public void Update()
             {
-                // Calculate actual speed
-                Vector3 curRotation = agent.transform.rotation.eulerAngles - previousRotation;
-                curSpeed = curRotation.magnitude / Time.deltaTime;
-                previousRotation = agent.transform.rotation.eulerAngles;
+                Vector2 currentForwarVector = new Vector2(agent.transform.forward.x, agent.transform.forward.z);
+                Vector2 targetVector = new Vector2((target - agent.transform.position).x, (target - agent.transform.position).z);
+                float angleToTarget = Vector2.SignedAngle(currentForwarVector,targetVector);
 
-                if(curSpeed > 0f)
+                float turn = (angleToTarget > 0 ? -1 : 1) * turnSpeed * Time.deltaTime;
+
+                if (Math.Abs(turn) > Math.Abs(angleToTarget))
                 {
-                    targetPosition = rotation;
-                    targetPoint = new Vector3(targetPosition.x, agent.transform.position.y, targetPosition.z);
-                    direction = (targetPoint - agent.transform.position).normalized;
-                    lookRotation = Quaternion.LookRotation(direction);
-
-                    turnAmount = Mathf.Atan2(targetPoint.x, targetPoint.z);
-                    agent.transform.rotation = Quaternion.RotateTowards(agent.transform.rotation, lookRotation, 1);
-                    animator.SetFloat("Turn", -turnAmount * curSpeed / damping, 0.1f, Time.deltaTime);
-                    /*navMeshAgent.SetDestination(targetPoint);
-                    if (navMeshAgent.remainingDistance > navMeshAgent.stoppingDistance)
-                    {
-                        thirdPersonCharacter.Move(navMeshAgent.desiredVelocity, false, false);
-                    }*/
-                    //Debug.Log(curSpeed);
+                    agent.transform.RotateAround(agent.transform.position, Vector3.up, angleToTarget);
+                    OnTaskFinished();
                 }
                 else
                 {
-                    animator.SetFloat("Turn", 0f, 0.1f, Time.deltaTime);
-                    // Trigger the TaskFinished event
-                    if(frameCount == frameTimer) //TODO replace this with a waiting subtask for the same amount of time as the Animator's dampTime
-                    {
-                        OnTaskFinished();
-                    }
-                    else
-                    {
-                        frameCount++;
-                    }
-                    //agent.StartCoroutine(FinishAnimation());
+                    agent.transform.RotateAround(agent.transform.position, Vector3.up, turn);
                 }
-            }
 
-            private IEnumerator FinishAnimation()
-            {
-                animator.SetFloat("Turn", 0f, 0.1f, Time.deltaTime);
-                // Wait for the current animation to finish
-                Debug.Log(animator.IsInTransition(0));
-                Debug.Log(animator.GetCurrentAnimatorStateInfo(0));
-                while (!animator.GetCurrentAnimatorStateInfo(0).IsName("Base.Grounded"))
-                {
-                    yield return null;
-                }
-                Debug.Log("task finished");
-                OnTaskFinished();
+                
             }
         }
     }

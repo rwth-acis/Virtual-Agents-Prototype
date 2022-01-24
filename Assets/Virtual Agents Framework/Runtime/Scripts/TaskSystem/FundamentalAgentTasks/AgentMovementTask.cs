@@ -76,8 +76,6 @@ namespace VirtualAgentsFramework
             {
                 this.agent = agent;
                 navMeshAgent = agent.GetComponent<NavMeshAgent>();
-                navMeshAgent.updateRotation = true;
-                navMeshAgent.updatePosition = true;
                 animationUpdater = agent.GetComponent<AgentAnimationUpdater>();
 
                 // Set running or walking speed
@@ -90,6 +88,8 @@ namespace VirtualAgentsFramework
                     navMeshAgent.speed = walkingSpeed;
                 }
 
+                animationUpdater.startMovement(destinationObject);
+
                 //TODO destroy destination object upon execution (if one was created)
             }
 
@@ -98,13 +98,6 @@ namespace VirtualAgentsFramework
             /// </summary>
             public void Update()
             {
-                if (destinationObject != null)
-                {
-                    navMeshAgent.SetDestination(destinationObject.transform.position);
-                }
-
-                animationUpdater.updateAnimatiorParameters();
-
                 if (navMeshAgent.desiredVelocity.magnitude < 0.001f)
                 {
                     standingFrameCounter++;
