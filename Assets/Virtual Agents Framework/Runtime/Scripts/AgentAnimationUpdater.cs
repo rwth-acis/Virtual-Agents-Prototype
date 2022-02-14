@@ -8,24 +8,14 @@ using UnityEngine.AI;
 
 public class AgentAnimationUpdater : MonoBehaviour
 {
-    CharacterController controller;
     NavMeshAgent agent;
 	Animator animator;
-	NavMeshAgent navMeshAgent;
 
-	private Vector2 previousForwardVector;
-	private Vector3 previousPosition;
-	private GameObject target;
-
-	//Animation Parameter Names
-
+	// animation Parameter Names
 	[SerializeField] private string forwardSpeed = "Speed";
 	[SerializeField] private string angularSpeed = "Turn";
-	//The speed where the full running anmation is synchrone with the floor
-	[SerializeField] private float movmentTopSpeed = 4;
-	[SerializeField] private float angularTopSpeed = 20;
 
-	public bool movementHandeldByAnimator = false;
+	public bool movementHandeledByAnimator = false;
 
 	// animation IDs
 	private int _animIDSpeed;
@@ -36,7 +26,7 @@ public class AgentAnimationUpdater : MonoBehaviour
 		AssignAnimationIDs();
 		agent = GetComponent<NavMeshAgent>();
 		animator = GetComponent<Animator>();
-		navMeshAgent = GetComponent<NavMeshAgent>();
+		animator.applyRootMotion = false;		
 	}
 
     private void AssignAnimationIDs()
@@ -50,32 +40,13 @@ public class AgentAnimationUpdater : MonoBehaviour
 	/// <summary>
 	/// Updates the animation parameters for the blend trees
 	/// </summary>
-	public void updateAnimatiorParameters()
+	private void UpdateAnimatorParameters()
 	{
-		//Update forward speed
-		float speed = (transform.position - previousPosition).magnitude / Time.deltaTime;
-		previousPosition = transform.position;
-		animator.SetFloat(_animIDSpeed, speed / movmentTopSpeed, 0.1f, Time.deltaTime);
-
-		//Update angeluar speed
-		Vector2 currentForwarVector = new Vector2(agent.transform.forward.x, agent.transform.forward.z);
-		float curSpeed = Vector2.SignedAngle(currentForwarVector,previousForwardVector) / Time.deltaTime;
-		previousForwardVector = currentForwarVector;
-		animator.SetFloat(_animIDAngularSpeed, curSpeed/ angularTopSpeed, 0.1f, Time.deltaTime);
-		Debug.Log(curSpeed);
+		animator.SetFloat(_animIDSpeed, agent.velocity.magnitude);
 	}
 
     private void Update()
     {
-		if (target != null && navMeshAgent.destination != target.transform.position)
-		{
-			navMeshAgent.SetDestination(target.transform.position);
-		}
-		updateAnimatiorParameters();
+        UpdateAnimatorParameters();
     }
-
-	public void OnAnimatorMove()
-	{
-		//Override, to disabel all movment from the animator, otherwise it would interfere with the navmeshAgent movement.
-	}
 }
