@@ -1,130 +1,106 @@
-using UnityEngine;
-// NavMesh
-using UnityEngine.AI;
-// IEnumerator
-using System.Collections;
-// Tasks
-using System.Collections.Generic;
-using VirtualAgentsFramework.AgentTasks;
-// Action
+using i5.Toolkit.Core.Utilities;
 using System;
-// Rigs
-using UnityEngine.Animations.Rigging;
+using UnityEngine;
+using UnityEngine.AI;
 
 namespace VirtualAgentsFramework
 {
     namespace AgentTasks
     {
         /// <summary>
-        /// Define movement tasks such as walking and running
+        /// Defines movement tasks for walking and running
+        /// Uses the NavMeshAgent component
         /// </summary>
         public class AgentMovementTask : IAgentTask
         {
-            Agent agent;
-            NavMeshAgent navMeshAgent;
-            AgentAnimationUpdater animationUpdater;
+            protected NavMeshAgent navMeshAgent;
 
-            private GameObject destinationObject = null;
-            private bool run;
+            private const float minDistance = 0.01f;
 
-            private const float walkingSpeed = 1.8f;
-            private const float runningSpeed = 4;
+            /// <summary>
+            /// Destination coordinates of the movement task
+            /// </summary>
+            public Vector3 Destination { get; protected set; }
 
-            //When the agent stands still for standingFrames frames, the task finishes
-            private const float standingFrames = 2;
-            private float standingFrameCounter = 0;
+            /// <summary>
+            /// The target movement speed of the agent
+            /// If negative, the default value set in the NavMeshAgent is taken
+            /// </summary>
+            public float TargetSpeed { get; protected set; }
 
             public event Action OnTaskFinished;
 
             /// <summary>
-            /// Create an AgentMovementTask using a destination GameObject
-            /// </summary>
-            /// <param name="destinationObject">GameObject the agent should move to</param>
-            /// <param name="run">true if the agent should run, false if the agent should walk</param>
-            public AgentMovementTask(GameObject destinationObject, bool run = false)
-            {
-                this.run = run;
-                this.destinationObject = destinationObject; //TODO raise exception if null
-            }
-
-            /// <summary>
             /// Create an AgentMovementTask using destination coordinates
             /// </summary>
-            /// <param name="destinationCoordinates">Position the agent should move to</param>
-            /// <param name="run">true if the agent should run, false if the agent should walk</param>
-            public AgentMovementTask(Vector3 destinationCoordinates, bool run = false)
+            /// <param name="destinationCoordinates">The position to which the agent should move</param>
+            /// <param name="targetSpeed">The target speed of the agent, e.g. to set running or walking; if not set, the default value in the NavMeshAgent is taken</param>
+            public AgentMovementTask(Vector3 destinationCoordinates, float targetSpeed = -1)
             {
-                this.run = run;
-                CreateDestinationObject(destinationCoordinates);
+                Destination = destinationCoordinates;
+                TargetSpeed = targetSpeed;
             }
 
             /// <summary>
-            /// Helper function to create a destination GameObject using coordinates
+            /// Create an AgentMovementTask using a destination Transform
             /// </summary>
-            /// <param name="destinationCoordinates">Destination GameObject's position</param>
-            private void CreateDestinationObject(Vector3 destinationCoordinates)
+            /// <param name="destinationTransform">The transform to which the agent should walk</param>
+            /// <param name="targetSpeed">The target speed of the agent, e.g. to set running or walking; if not set, the default value in the NavMeshAgent is taken</param>
+            public AgentMovementTask(Transform destinationTransform, float targetSpeed = -1)
+                : this(destinationTransform.position, targetSpeed)
             {
-                destinationObject = new GameObject();
-                destinationObject.transform.position = destinationCoordinates;
             }
 
             /// <summary>
-            /// Set the agent's and movement parameters and get the agent moving
+            /// Starts the movement task
             /// </summary>
-            /// <param name="agent">Agent to be moved</param>
+            /// <param name="agent">The agent which should execute the movement task</param>
             public void Execute(Agent agent)
             {
-                this.agent = agent;
                 navMeshAgent = agent.GetComponent<NavMeshAgent>();
-                animationUpdater = agent.GetComponent<AgentAnimationUpdater>();
 
-                // Set running or walking speed
-                if(run == true)
+                // only proceed on agents with a NavMeshAgent
+                if (navMeshAgent == null)
                 {
-                    navMeshAgent.speed = runningSpeed;
-                }
-                else
-                {
-                    navMeshAgent.speed = walkingSpeed;
+                    i5Debug.LogError($"The agent {agent.name} does not have a NavMeshAgent component. " +
+                        $"Therefore, it cannot move. Skipping this task.",
+                        this);
+
+                    OnTaskFinished?.Invoke();
+
+                    return;
                 }
 
-                startMovement();
-
-                //TODO destroy destination object upon execution (if one was created)
+                StartMovement();
             }
 
             /// <summary>
-            /// Update the animations as long as the agent still moves. When the NavmeshAgent didn't move this agent for standingFrames frames, the task is finished
+            /// Update the animations as long as the agent still moves.
+            /// If the NavMeshAgent did not move this agent for standingFrames frames, the task is finished
             /// </summary>
             public void Update()
             {
-                if (navMeshAgent.desiredVelocity.magnitude < 0.001f)
+                if (navMeshAgent.remainingDistance < minDistance)
                 {
-                    standingFrameCounter++;
-                }
-                else
-                {
-                    standingFrameCounter = 0;
-                }
-
-                if (standingFrameCounter >= standingFrames)
-                {
-                    stopMovement();
-                    OnTaskFinished();
+                    StopMovement();
                 }
             }
 
-            private void startMovement()
+            private void StartMovement()
             {
-                navMeshAgent.SetDestination(destinationObject.transform.position);
-                navMeshAgent.updateRotation = true;
+                navMeshAgent.SetDestination(Destination);
+                if (TargetSpeed > 0)
+                {
+                    navMeshAgent.speed = TargetSpeed;
+                }
+                navMeshAgent.enabled = true;
                 navMeshAgent.updatePosition = true;
+                navMeshAgent.updateRotation = true;
             }
 
-            private void stopMovement()
+            private void StopMovement()
             {
-                navMeshAgent.updateRotation = false;
-                navMeshAgent.updatePosition = false;
+                OnTaskFinished?.Invoke();
             }
         }
     }

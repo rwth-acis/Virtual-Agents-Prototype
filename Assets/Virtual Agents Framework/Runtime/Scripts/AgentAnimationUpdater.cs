@@ -26,8 +26,8 @@ public class AgentAnimationUpdater : MonoBehaviour
 		AssignAnimationIDs();
 		agent = GetComponent<NavMeshAgent>();
 		animator = GetComponent<Animator>();
-		animator.applyRootMotion = false;		
-	}
+        animator.applyRootMotion = false;
+    }
 
     private void AssignAnimationIDs()
 	{

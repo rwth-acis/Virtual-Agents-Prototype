@@ -45,7 +45,6 @@ namespace VirtualAgentsFramework
 
             agent.WaitForSeconds(1);
             agent.WalkTo(scheduel1);
-            agent.RunTo(scheduel1);
             agent.WalkTo(scheduel2);
             agent.RotateTowards(scheduel1.transform.position);
             agent.PointTo(scheduel1,twist, leftArmStretch, leftArmStretchTarget);

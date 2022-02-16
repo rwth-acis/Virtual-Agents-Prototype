@@ -38,7 +38,7 @@ namespace VirtualAgentsFramework
 
             // Option 2: create and assign tasks manually
             // Create a task:
-            AgentMovementTask quickExitTask = new AgentMovementTask(exitDestinationPosition, true); // true makes the agent run instead of walking
+            AgentMovementTask quickExitTask = new AgentMovementTask(exitDestinationPosition);
             // Assign the task:
             agent.ScheduleTask(quickExitTask); // run to exitDestinationPosition
         }

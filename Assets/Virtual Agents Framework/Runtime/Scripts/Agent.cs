@@ -124,12 +124,12 @@ namespace VirtualAgentsFramework
                 // The queue is not empty, thus...
                 // change the agent's current state to busy,
                 currentState = State.busy;
-                // execute the next task,
-                nextTask.Execute(this);
                 // save the current task,
                 currentTask = nextTask;
                 // subscribe to the task's OnTaskFinished event to set the agent's state to idle after task execution
                 currentTask.OnTaskFinished += SetAgentStateToIdle;
+                // execute the next task,
+                nextTask.Execute(this);
             }
         }
 
@@ -152,7 +152,7 @@ namespace VirtualAgentsFramework
         /// <param name="asap">true if the task should be executed as soon as possible, false if the task should be scheduled</param>
         public void WalkTo(GameObject destinationObject, bool asap = false)
         {
-            AgentMovementTask movementTask = new AgentMovementTask(destinationObject);
+            AgentMovementTask movementTask = new AgentMovementTask(destinationObject.transform);
             ScheduleOrForce(movementTask, asap);
         }
 
@@ -165,30 +165,6 @@ namespace VirtualAgentsFramework
         public void WalkTo(Vector3 destinationCoordinates, bool asap = false)
         {
             AgentMovementTask movementTask = new AgentMovementTask(destinationCoordinates);
-            ScheduleOrForce(movementTask, asap);
-        }
-
-        /// <summary>
-        /// Creates an AgentMovementTask for running and schedules it or forces its execution.
-        /// Shortcut queue management function
-        /// </summary>
-        /// <param name="destinationObject">GameObject the agent should run to</param>
-        /// <param name="asap">true if the task should be executed as soon as possible, false if the task should be scheduled</param>
-        public void RunTo(GameObject destinationObject, bool asap = false)
-        {
-            AgentMovementTask movementTask = new AgentMovementTask(destinationObject, true);
-            ScheduleOrForce(movementTask, asap);
-        }
-
-        /// <summary>
-        /// Creates an AgentMovementTask for running and schedules it or forces its execution.
-        /// Shortcut queue management function
-        /// </summary>
-        /// <param name="destinationCoordinates">Position the agent should run to</param>
-        /// <param name="asap">true if the task should be executed as soon as possible, false if the task should be scheduled</param>
-        public void RunTo(Vector3 destinationCoordinates, bool asap = false)
-        {
-            AgentMovementTask movementTask = new AgentMovementTask(destinationCoordinates, true);
             ScheduleOrForce(movementTask, asap);
         }
 
