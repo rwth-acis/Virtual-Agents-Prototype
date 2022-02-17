@@ -6,6 +6,7 @@ using VirtualAgentsFramework.AgentTasks;
 // Rigs
 using UnityEngine.Animations.Rigging;
 using System;
+using VirtualAgentsFramework.TaskSystem;
 
 namespace VirtualAgentsFramework
 {
@@ -18,19 +19,9 @@ namespace VirtualAgentsFramework
     public class Agent : MonoBehaviour
     {
         // Agent's personal task queue
-        private AgentTaskManager queue = new AgentTaskManager();
+        private AgentTaskQueue queue = new AgentTaskQueue();
 
-        private State currentState;
-
-        /// <summary>
-        /// States an agent can be in
-        /// </summary>
-        public enum State
-        {
-            inactive, // i.e. requesting new tasks is disabled
-            idle, // i.e. requesting new tasks is enabled
-            busy // i.e. currently executing a task
-        }
+        private TaskState currentState;
 
         /// <summary>
         /// Agent's current task
@@ -40,7 +31,7 @@ namespace VirtualAgentsFramework
         /// <summary>
         /// Agent's current state
         /// </summary>
-        public State CurrentState
+        public TaskState CurrentState
         {
             get => currentState;
             private set
@@ -59,7 +50,7 @@ namespace VirtualAgentsFramework
         {
             // Make the agent start in the idle state in order to enable requesting new tasks
             // CHANGE_ME to inactive in order to disable requesting new tasks
-            currentState = State.idle;
+            currentState = TaskState.idle;
         }
 
         /// <summary>
@@ -69,12 +60,12 @@ namespace VirtualAgentsFramework
         {
             switch (CurrentState)
             {
-                case State.inactive: // do nothing
+                case TaskState.inactive: // do nothing
                     break;
-                case State.idle:
+                case TaskState.idle:
                     RequestNextTask(); // request new tasks
                     break;
-                case State.busy:
+                case TaskState.busy:
                     CurrentTask.Update(); // perform frame-to-frame updates required by the current task
                     break;
             }
@@ -115,13 +106,13 @@ namespace VirtualAgentsFramework
             if (nextTask == null)
             {
                 // The queue is empty, thus change the agent's current state to idle
-                CurrentState = State.idle;
+                CurrentState = TaskState.idle;
             }
             else
             {
                 // The queue is not empty, thus...
                 // change the agent's current state to busy,
-                CurrentState = State.busy;
+                CurrentState = TaskState.busy;
                 // save the current task,
                 CurrentTask = nextTask;
                 // subscribe to the task's OnTaskFinished event to set the agent's state to idle after task execution
@@ -137,7 +128,7 @@ namespace VirtualAgentsFramework
         /// </summary>
         private void SetAgentStateToIdle()
         {
-            CurrentState = State.idle;
+            CurrentState = TaskState.idle;
             // Unsubscribe from the event
             CurrentTask.OnTaskFinished -= SetAgentStateToIdle;
         }

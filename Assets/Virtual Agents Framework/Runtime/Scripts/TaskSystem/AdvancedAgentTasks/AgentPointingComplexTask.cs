@@ -19,7 +19,7 @@ namespace VirtualAgentsFramework
         /// Define tasks for playing a procedural pointing animation
         /// towards a versatile position. Using non-parallel subtasks
         /// </summary>
-        public class AgentPointingComplexTask : AgentComplexTask
+        public class AgentPointingComplexTask : AgentSequentialTask
         {
             private GameObject destinationObject = null;
             private GameObject target = null;
@@ -63,7 +63,7 @@ namespace VirtualAgentsFramework
             }
         }
 
-        public class ChangeRigWeightSubTask : AgentLazyTask
+        public class ChangeRigWeightSubTask : AgentBaseTask
         {
             private Rig rig;
             private float targetWeight;
@@ -89,7 +89,7 @@ namespace VirtualAgentsFramework
                 if((rig.weight >= targetWeight - precisionFactor / speed) && (rig.weight <= targetWeight + precisionFactor / speed))
                 {
                     // Trigger the TaskFinished event
-                    FinishTask();
+                    MarkAsFinished();
                 }
             }
         }

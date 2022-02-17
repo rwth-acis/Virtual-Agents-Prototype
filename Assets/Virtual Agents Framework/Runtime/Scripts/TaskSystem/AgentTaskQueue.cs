@@ -5,16 +5,16 @@ namespace VirtualAgentsFramework
     namespace AgentTasks
     {
         /// <summary>
-        /// Hold and manage an IAgentTask queue
+        /// Holds an IAgentTask queue
         /// </summary>
-        public class AgentTaskManager
+        public class AgentTaskQueue
         {
             private LinkedList<IAgentTask> taskQueue;
 
             /// <summary>
             /// Create an empty IAgentTask queue
             /// </summary>
-            public AgentTaskManager()
+            public AgentTaskQueue()
             {
                 taskQueue = new LinkedList<IAgentTask>();
             }
