@@ -1,15 +1,4 @@
-using UnityEngine;
-// NavMesh
-using UnityEngine.AI;
-// IEnumerator
-using System.Collections;
-// Tasks
 using System.Collections.Generic;
-using VirtualAgentsFramework.AgentTasks;
-// Action
-using System;
-// Rigs
-using UnityEngine.Animations.Rigging;
 
 namespace VirtualAgentsFramework
 {
@@ -20,15 +9,14 @@ namespace VirtualAgentsFramework
         /// </summary>
         public class AgentTaskManager
         {
-            private Queue<IAgentTask> taskQueue;
+            private LinkedList<IAgentTask> taskQueue;
 
             /// <summary>
             /// Create an empty IAgentTask queue
             /// </summary>
             public AgentTaskManager()
             {
-                taskQueue = new Queue<IAgentTask>();
-                taskQueue.Clear();
+                taskQueue = new LinkedList<IAgentTask>();
             }
 
             /// <summary>
@@ -37,9 +25,11 @@ namespace VirtualAgentsFramework
             /// <returns>Next task from the queue or null if the queue is empty</returns>
             public IAgentTask RequestNextTask()
             {
-                if(taskQueue.Count > 0)
+                if (taskQueue.First != null)
                 {
-                    return taskQueue.Dequeue();
+                    IAgentTask result = taskQueue.First.Value;
+                    taskQueue.RemoveFirst();
+                    return result;
                 }
                 else
                 {
@@ -53,7 +43,7 @@ namespace VirtualAgentsFramework
             /// <param name="task">Any task that implements the IAgentTask interface</param>
             public void AddTask(IAgentTask task)
             {
-                taskQueue.Enqueue(task);
+                taskQueue.AddLast(task);
             }
 
             /// <summary>
@@ -64,13 +54,7 @@ namespace VirtualAgentsFramework
             /// <param name="task">Any task that implements the IAgentTask interface</param>
             public void ForceTask(IAgentTask task)
             {
-                Queue<IAgentTask> tempQueue = new Queue<IAgentTask>();
-                tempQueue.Enqueue(task);
-                while (taskQueue.Count > 0)
-                {
-                    tempQueue.Enqueue(taskQueue.Dequeue());
-                }
-                taskQueue = tempQueue;
+                taskQueue.AddFirst(task);
             }
         }
     }

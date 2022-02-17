@@ -1,15 +1,11 @@
 using UnityEngine;
 // NavMesh
 using UnityEngine.AI;
-// IEnumerator
-using System.Collections;
 // Tasks
-using System.Collections.Generic;
 using VirtualAgentsFramework.AgentTasks;
-// Action
-using System;
 // Rigs
 using UnityEngine.Animations.Rigging;
+using System;
 
 namespace VirtualAgentsFramework
 {
@@ -21,17 +17,15 @@ namespace VirtualAgentsFramework
     [RequireComponent(typeof(AgentAnimationUpdater))] // Responsible for the avatar's movement
     public class Agent : MonoBehaviour
     {
-        private NavMeshAgent agent;
-
-        /// <summary>
-        /// Agent's personal task queue
-        /// </summary>
+        // Agent's personal task queue
         private AgentTaskManager queue = new AgentTaskManager();
+
+        private State currentState;
 
         /// <summary>
         /// States an agent can be in
         /// </summary>
-        private enum State
+        public enum State
         {
             inactive, // i.e. requesting new tasks is disabled
             idle, // i.e. requesting new tasks is enabled
@@ -39,24 +33,30 @@ namespace VirtualAgentsFramework
         }
 
         /// <summary>
-        /// Agent's current state
-        /// </summary>
-        private State currentState;
-
-        /// <summary>
         /// Agent's current task
         /// </summary>
-        private IAgentTask currentTask;
+        public IAgentTask CurrentTask { get; private set; }
 
         /// <summary>
-        /// Set up the agent
+        /// Agent's current state
         /// </summary>
-        void Start()
+        public State CurrentState
         {
-            // Get the agent's NavMeshAgent component
-            agent = GetComponent<NavMeshAgent>();
-            // Disable NavMeshAgent's rotation updates, since rotation is handled by ThirdPersonCharacter
-            agent.updateRotation = false;
+            get => currentState;
+            private set
+            {
+                currentState = value;
+                OnStateChanged?.Invoke();
+            }
+        }
+
+        public event Action OnStateChanged;
+
+        /// <summary>
+        /// Initialize the agent
+        /// </summary>
+        private void Awake()
+        {
             // Make the agent start in the idle state in order to enable requesting new tasks
             // CHANGE_ME to inactive in order to disable requesting new tasks
             currentState = State.idle;
@@ -65,9 +65,9 @@ namespace VirtualAgentsFramework
         /// <summary>
         /// Enable the right mode depending on the agent's status
         /// </summary>
-        void Update()
+        private void Update()
         {
-            switch(currentState)
+            switch (CurrentState)
             {
                 case State.inactive: // do nothing
                     break;
@@ -75,7 +75,7 @@ namespace VirtualAgentsFramework
                     RequestNextTask(); // request new tasks
                     break;
                 case State.busy:
-                    currentTask.Update(); // perform frame-to-frame updates required by the current task
+                    CurrentTask.Update(); // perform frame-to-frame updates required by the current task
                     break;
             }
         }
@@ -86,7 +86,7 @@ namespace VirtualAgentsFramework
         /// </summary>
         public void ReturnToIdle()
         {
-            AgentAnimationTask currentAnimationTask = (AgentAnimationTask)currentTask;
+            AgentAnimationTask currentAnimationTask = (AgentAnimationTask)CurrentTask;
             currentAnimationTask.ReturnToIdle();
         }
 
@@ -108,26 +108,24 @@ namespace VirtualAgentsFramework
             queue.ForceTask(task);
         }
 
-        /// <summary>
-        /// Request the next task from the agent's task queue
-        /// </summary>
+        // Request the next task from the agent's task queue
         private void RequestNextTask()
         {
             IAgentTask nextTask = queue.RequestNextTask();
-            if(nextTask == null)
+            if (nextTask == null)
             {
                 // The queue is empty, thus change the agent's current state to idle
-                currentState = State.idle;
+                CurrentState = State.idle;
             }
             else
             {
                 // The queue is not empty, thus...
                 // change the agent's current state to busy,
-                currentState = State.busy;
+                CurrentState = State.busy;
                 // save the current task,
-                currentTask = nextTask;
+                CurrentTask = nextTask;
                 // subscribe to the task's OnTaskFinished event to set the agent's state to idle after task execution
-                currentTask.OnTaskFinished += SetAgentStateToIdle;
+                CurrentTask.OnTaskFinished += SetAgentStateToIdle;
                 // execute the next task,
                 nextTask.Execute(this);
             }
@@ -139,9 +137,9 @@ namespace VirtualAgentsFramework
         /// </summary>
         private void SetAgentStateToIdle()
         {
-            currentState = State.idle;
+            CurrentState = State.idle;
             // Unsubscribe from the event
-            currentTask.OnTaskFinished -= SetAgentStateToIdle;
+            CurrentTask.OnTaskFinished -= SetAgentStateToIdle;
         }
 
         /// <summary>
@@ -193,11 +191,11 @@ namespace VirtualAgentsFramework
         }
 
         //TODO
-        public void PressOn(Vector3 destinationCoordinates, bool asap = false)
-        {
-            //AgentPressingTask pressingTask = new AgentPressingTask(destinationCoordinates);
-            //ScheduleOrForce(pressingTask, asap);
-        }
+        //public void PressOn(Vector3 destinationCoordinates, bool asap = false)
+        //{
+        //AgentPressingTask pressingTask = new AgentPressingTask(destinationCoordinates);
+        //ScheduleOrForce(pressingTask, asap);
+        //}
 
         /// <summary>
         /// Creates an AgentPointingComplexTask and schedules it or forces its execution.
@@ -213,8 +211,8 @@ namespace VirtualAgentsFramework
         {
             /*if(procedural)
             {*/
-                //AgentPointingTask pointingTask = new AgentPointingTask(destinationObject, twistChain, leftArmStretch, target);
-                AgentPointingComplexTask pointingTask = new AgentPointingComplexTask(destinationObject, twistChain, leftArmStretch, target);
+            //AgentPointingTask pointingTask = new AgentPointingTask(destinationObject, twistChain, leftArmStretch, target);
+            AgentPointingComplexTask pointingTask = new AgentPointingComplexTask(destinationObject, twistChain, leftArmStretch, target);
             /*}
             else
             {
@@ -250,7 +248,7 @@ namespace VirtualAgentsFramework
         /// <param name="force">Flag: true if the task's execution should be forced, false if the task should be scheduled</param>
         public void ScheduleOrForce(IAgentTask task, bool force)
         {
-            if(force == true)
+            if (force == true)
             {
                 queue.ForceTask(task);
             }
